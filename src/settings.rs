@@ -151,6 +151,7 @@ pub struct Settings {
     pub sort_order: SortOrder,
     pub pattern: Option<Regex>,
     pub dump_format: DumpFormat,
+    pub full_dump: bool,
     pub colors: Colors,
     pub stats_min_cmd_length: i16,
     pub stats_cmds: i16,
@@ -193,6 +194,7 @@ impl Default for Settings {
             sort_order: SortOrder::default(),
             pattern: None,
             dump_format: DumpFormat::default(),
+            full_dump: false,
             colors: Colors {
                 menubar_bg: Color::Blue,
                 menubar_fg: Color::White,
@@ -449,6 +451,7 @@ impl Settings {
                 sort,
                 regex,
                 format,
+                full,
             } => {
                 settings.mode = Mode::Dump;
 
@@ -457,6 +460,7 @@ impl Settings {
                 settings.sort_order = sort;
                 settings.pattern = regex;
                 settings.dump_format = format;
+                settings.full_dump = full;
             }
 
             SubCommand::Stats {

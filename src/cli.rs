@@ -138,6 +138,10 @@ pub enum SubCommand {
         /// The format to dump in
         #[arg(long, short, value_enum, default_value_t)]
         format: DumpFormat,
+
+        /// Output all fields (full dump)
+        #[arg(long)]
+        full: bool,
     },
 
     /// Prints stats

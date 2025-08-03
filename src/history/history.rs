@@ -50,9 +50,16 @@ pub struct Command {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DumpCommand {
+    pub id: i64,
     pub cmd: String,
+    pub cmd_tpl: String,
+    pub session_id: String,
     #[serde(serialize_with = "ser_to_datetime")]
     pub when_run: i64,
+    pub exit_code: i32,
+    pub selected: i32,
+    pub dir: Option<String>,
+    pub old_dir: Option<String>,
 }
 
 impl fmt::Display for Command {
@@ -792,28 +799,34 @@ impl History {
             if let Some(since) = &time_range.since {
                 where_clause.push_str(" :since <= when_run");
                 has_conds = true;
-                params.push((":since", since));
+                params.push( (":since", since) );
             }
 
             if let Some(before) = &time_range.before {
                 if has_conds {
                     where_clause.push_str(" AND");
                 }
-
                 where_clause.push_str(" when_run < :before");
-                params.push((":before", before));
+                params.push( (":before", before) );
             }
         }
 
         let query = format!(
-            "SELECT cmd, when_run FROM commands {} ORDER BY when_run {}",
+            "SELECT id, cmd, cmd_tpl, session_id, when_run, exit_code, selected, dir, old_dir FROM commands {} ORDER BY when_run {}",
             where_clause,
             order.to_str()
         );
         self.run_query(&query, params.as_slice(), |row| {
             Ok(DumpCommand {
-                cmd: row.get(0)?,
-                when_run: row.get(1)?,
+                id: row.get(0)?,
+                cmd: row.get(1)?,
+                cmd_tpl: row.get(2)?,
+                session_id: row.get(3)?,
+                when_run: row.get(4)?,
+                exit_code: row.get(5)?,
+                selected: row.get(6)?,
+                dir: row.get(7).ok(),
+                old_dir: row.get(8).ok(),
             })
         })
     }
