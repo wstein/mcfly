@@ -225,6 +225,29 @@ You can dump all the commands history without any arguments:
 mcfly dump
 ```
 
+### --full flag for dump
+
+By default, `mcfly dump` outputs a minimal set of fields for each command: `cmd` and `when_run`.
+
+If you want to see all available metadata for each command, use the `--full` flag:
+
+```bash
+mcfly dump --full
+```
+
+With `--full`, the output (in both JSON and CSV formats) will include:
+- `id`: Unique identifier for the command
+- `cmd`: The command string
+- `cmd_tpl`: The command template
+- `session_id`: The session identifier
+- `when_run`: When the command was run
+- `exit_code`: The exit code of the command
+- `selected`: Whether the command was selected in McFly
+- `dir`: The working directory
+- `old_dir`: The previous working directory
+
+This is useful for advanced analysis or auditing of your shell history.
+
 ### Timestamp format
 
 McFly parses timestamps via `chrono-systemd-time`, a non-strict implementation of [systemd.time](https://www.freedesktop.org/software/systemd/man/systemd.time.html), with the following exceptions:
