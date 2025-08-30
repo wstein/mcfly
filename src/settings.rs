@@ -176,7 +176,7 @@ impl Default for Settings {
             refresh_training_cache: false,
             append_to_histfile: None,
             debug: false,
-            fuzzy: 0,
+            fuzzy: 3,
             lightmode: false,
             key_scheme: KeyScheme::Emacs,
             history_format: HistoryFormat::Bash,
