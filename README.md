@@ -1,7 +1,7 @@
 > **Seeking co-maintainers**:
 > I don't have much time to maintain this project these days. If someone would like to jump in and become a co-maintainer, it would be appreciated!
 
-![Build Status](https://github.com/cantino/mcfly/actions/workflows/mean_bean_ci.yml/badge.svg)
+![Build Status](https://github.com/wstein/mcfly/actions/workflows/mean_bean_ci.yml/badge.svg)
 [![](https://img.shields.io/crates/v/mcfly.svg)](https://crates.io/crates/mcfly)
 
 # McFly - fly through your shell history
@@ -112,7 +112,7 @@ When suggesting a command, McFly takes into consideration:
 
 ### Installing using our install script (macOS or Linux)
 
-1. `curl -LSfs https://raw.githubusercontent.com/cantino/mcfly/master/ci/install.sh | sh -s -- --git cantino/mcfly` (or, if the current user doesn't have permissions to edit /usr/local/bin, then use `sudo sh -s`.)
+1. `curl -LSfs https://raw.githubusercontent.com/wstein/mcfly/master/ci/install.sh | sh -s -- --git wstein/mcfly` (or, if the current user doesn't have permissions to edit /usr/local/bin, then use `sudo sh -s`.)
 
 2. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish` file, respectively:
 
@@ -137,7 +137,7 @@ When suggesting a command, McFly takes into consideration:
 
 ### Installing manually from GitHub (macOS or Linux)
 
-1. Download the [latest release from GitHub](https://github.com/cantino/mcfly/releases).
+1. Download the [latest release from GitHub](https://github.com/wstein/mcfly/releases).
 1. Install to a location in your `$PATH`. (For example, you could create a directory at `~/bin`, copy `mcfly` to this location, and add `export PATH="$PATH:$HOME/bin"` to your `.bashrc` / `.zshrc`, or run `set -Ua fish_user_paths "$HOME/bin"` for fish.)
 1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish`, respectively:
 
@@ -161,7 +161,7 @@ When suggesting a command, McFly takes into consideration:
 ### Install manually from source (macOS, Linux, or Windows)
 
 1. [Install Rust 1.40 or later](https://www.rust-lang.org/tools/install)
-1. Run `git clone https://github.com/cantino/mcfly` and `cd mcfly`
+1. Run `git clone https://github.com/wstein/mcfly` and `cd mcfly`
 1. Run `cargo install --path .`
 1. Ensure `~/.cargo/bin` is in your `$PATH`.
 1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, `~/.config/fish/config.fish`, or powershell `$PROFILE`, respectively:
@@ -194,7 +194,7 @@ When suggesting a command, McFly takes into consideration:
 
     ```zsh
     zinit ice lucid wait"0a" from"gh-r" as"program" atload'eval "$(mcfly init zsh)"'
-    zinit light cantino/mcfly
+    zinit light wstein/mcfly
     ```
 * It will download mcfly and install for you.
 * `$(mcfly init zsh)` will be executed after prompt
@@ -327,7 +327,7 @@ $env:MCFLY_KEY_SCHEME="vim"
 ```
 
 ### Fuzzy Searching
-To enable fuzzy searching, set `MCFLY_FUZZY` to an integer. 0 is off; higher numbers weight toward shorter matches. Values in the 2-5 range get good results so far; try a few and [report what works best for you](https://github.com/cantino/mcfly/issues/183)!
+To enable fuzzy searching, set `MCFLY_FUZZY` to an integer. 0 is off; higher numbers weight toward shorter matches. Values in the 2-5 range get good results so far; try a few and [report what works best for you](https://github.com/wstein/mcfly/issues/183)!
 
 bash / zsh:
 ```bash
