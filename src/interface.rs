@@ -77,11 +77,6 @@ impl MenuMode {
             menu_text.push_str("⏎ - Run | TAB - Edit | ");
         }
 
-        match interface.result_sort {
-            ResultSort::Rank => menu_text.push_str("F1 - Rank Sort | "),
-            ResultSort::LastRun => menu_text.push_str("F1 - Time Sort | "),
-        }
-
         menu_text.push_str("F2 - Delete | ");
 
         match interface.result_filter {
@@ -89,6 +84,11 @@ impl MenuMode {
             ResultFilter::CurrentDirectory => menu_text.push_str("F3 - This Directory"),
         }
 
+        match interface.result_sort {
+            ResultSort::Rank => menu_text.push_str("| F4 - Rank Sort "),
+            ResultSort::LastRun => menu_text.push_str("F4 - Time Sort | "),
+        }
+        
         menu_text
     }
 
@@ -952,7 +952,7 @@ impl<'a> Interface<'a> {
                 } => self.input.move_cursor(Move::EOL),
 
                 KeyEvent {
-                    code: KeyCode::F(1),
+                    code: KeyCode::F(4),
                     ..
                 } => {
                     self.switch_result_sort();
