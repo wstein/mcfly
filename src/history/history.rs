@@ -3,6 +3,8 @@ use crate::cli::SortOrder;
 use crate::history::{db_extensions, schema};
 use crate::network::Network;
 use crate::path_update_helpers;
+use nucleo_matcher::{Matcher, Utf32Str};
+use std::cell::RefCell;
 use crate::settings::{HistoryFormat, ResultFilter, ResultSort, Settings, TimeRange};
 use crate::shell_history;
 use crate::simplified_command::SimplifiedCommand;
@@ -82,10 +84,20 @@ where
     serializer.serialize_str(&to_datetime(*when_run))
 }
 
-#[derive(Debug)]
 pub struct History {
     pub connection: Connection,
     pub network: Network,
+    matcher: RefCell<Option<Matcher>>,
+}
+
+impl std::fmt::Debug for History {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("History")
+            .field("connection", &"<Connection>")
+            .field("network", &"<Network>")
+            .field("matcher", &"<Matcher>")
+            .finish()
+    }
 }
 
 const IGNORED_COMMANDS: [&str; 7] = [
@@ -99,6 +111,21 @@ const IGNORED_COMMANDS: [&str; 7] = [
 ];
 
 impl History {
+    /// Lazily initialize and return a mutable borrow to the shared Matcher.
+    ///
+    /// The internal Matcher contains a large scratch slab so we store it inside an
+    /// Option and only allocate it on first use. This returns a RefMut<Matcher>
+    /// mapped from the internal RefCell<Option<Matcher>>.
+    fn matcher_mut(&self) -> std::cell::RefMut<Matcher> {
+        // If not initialized yet, create the Matcher. The temporary borrow from
+        // `borrow()` is dropped at the end of the `is_none()` check so calling
+        // `borrow_mut()` afterwards is safe.
+        if self.matcher.borrow().is_none() {
+            *self.matcher.borrow_mut() = Some(Matcher::default());
+        }
+        std::cell::RefMut::map(self.matcher.borrow_mut(), |opt| opt.as_mut().unwrap())
+    }
+
     #[must_use]
     pub fn load(history_format: HistoryFormat) -> History {
         let db_path = Settings::mcfly_db_path();
@@ -310,7 +337,7 @@ impl History {
                         .get(1)
                         .unwrap_or_else(|err| panic!("McFly error: cmd to be readable ({err})"));
 
-                    let bounds = Self::calc_match_indices(&text, &cmd, fuzzy);
+                    let bounds = self.calc_match_indices(&text, &cmd, fuzzy);
 
                     Ok(Command {
                         id: row.get(0).unwrap_or_else(|err| {
@@ -445,34 +472,40 @@ impl History {
     }
 
     /// Calculate the indices of the matches in the text.
-    fn calc_match_indices(text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
-        let (text, cmd) = if Self::is_case_sensitive(cmd) {
+    fn calc_match_indices(&self, text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
+        let (text_s, cmd_s) = if Self::is_case_sensitive(cmd) {
             (text.to_string(), cmd.to_string())
         } else {
             (text.to_lowercase(), cmd.to_lowercase())
         };
 
         match fuzzy {
-            0 => text
-                .match_indices(&cmd)
-                .flat_map(|(index, _)| index..index + cmd.len())
+            0 => text_s
+                .match_indices(&cmd_s)
+                .flat_map(|(index, _)| index..index + cmd_s.len())
                 .collect(),
             _ => {
-                let mut search_iter = cmd.chars().peekable();
+                // Use the shared Matcher instance on History to avoid
+                // allocating the large scratch slab per call. Lazily initialize
+                // and borrow the matcher mutably for the duration of the match.
+                let mut matcher = self.matcher_mut();
 
-                text.match_indices(|c| {
-                    let next = search_iter.peek();
+                // Prepare Utf32Str buffers that must outlive the views.
+                let mut hay_buf: Vec<char> = Vec::new();
+                let hay_utf = Utf32Str::new(&text_s, &mut hay_buf);
 
-                    if next.is_some() && next.unwrap() == &c {
-                        let _advance = search_iter.next();
+                let mut needle_buf: Vec<char> = Vec::new();
+                let needle_utf = Utf32Str::new(&cmd_s, &mut needle_buf);
 
-                        return true;
-                    }
+                let mut indices: Vec<u32> = Vec::new();
 
-                    false
-                })
-                .map(|m| m.0)
-                .collect()
+                if let Some(_score) = matcher.fuzzy_indices(hay_utf, needle_utf, &mut indices) {
+                    indices.sort_unstable();
+                    indices.dedup();
+                    indices.into_iter().map(|i| i as usize).collect()
+                } else {
+                    Vec::new()
+                }
             }
         }
     }
@@ -920,6 +953,7 @@ impl History {
         History {
             connection,
             network: Network::default(),
+            matcher: RefCell::new(None),
         }
     }
 
@@ -930,6 +964,37 @@ impl History {
         History {
             connection,
             network: Network::default(),
+            matcher: RefCell::new(None),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn matcher_is_lazy_initialized() {
+        // Create an in-memory DB so we don't touch the filesystem.
+        let connection = Connection::open_in_memory().unwrap();
+        db_extensions::add_db_functions(&connection);
+
+        let history = History {
+            connection,
+            network: Network::default(),
+            matcher: RefCell::new(None),
+        };
+
+        // Initially the matcher should be uninitialized (None).
+        assert!(history.matcher.borrow().is_none());
+
+        // Trigger a fuzzy match. Use simple strings so the match is found.
+        let indices = history.calc_match_indices("hello world", "hello", 1);
+
+        // After calling with fuzzy>0 the matcher should be initialized.
+        assert!(history.matcher.borrow().is_some());
+
+        // The returned indices should not be empty for this match.
+        assert!(!indices.is_empty());
     }
 }
