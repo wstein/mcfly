@@ -1,3 +1,8 @@
+0.9.3+dump-mlp-skim - Aug 31, 2025
+ - Use Skim crate for fuzzy finding
+ - Improve 3-layer MLP model and enable live training
+ - Add support to export the full history database to JSON
+
 0.9.3 - Feb 11, 2025
  - Fix PowerShell VIM key scheme duplicates keypresses (thanks @jtschuster)
  - Display more results by default (thanks @kentakom1213) and scrolling (thanks @kentakom1213)
