@@ -1,515 +1,166 @@
-> **Seeking co-maintainers**:
-> I don't have much time to maintain this project these days. If someone would like to jump in and become a co-maintainer, it would be appreciated!
-
-![Build Status](https://github.com/wstein/mcfly/actions/workflows/mean_bean_ci.yml/badge.svg)
-[![](https://img.shields.io/crates/v/mcfly.svg)](https://crates.io/crates/mcfly)
-
-# McFly - fly through your shell history
+# McFly Enhanced - Smarter Shell History Search
 
 <img src="/docs/screenshot.png" alt="screenshot" width="400">
 
-McFly replaces your default `ctrl-r` shell history search with an intelligent search engine that takes into account
-your working directory and the context of recently executed commands. McFly's suggestions are prioritized
-in real time with a small neural network.
+## 🚀 **Personal Enhanced Fork**
 
-TL;DR: an upgraded `ctrl-r` where history results make sense for what you're working on right now.
+This is a personal enhanced fork of McFly with **improved command suggestions** and **better search experience**.
 
-## Features
+**What's Better in This Fork:**
+- **🧠 Smarter Suggestions**: Advanced neural network learns your patterns better
+- **⚡ Better Search Experience**: Fuzzy search with **bold highlighting** makes matches easy to spot
+- **🎯 More Accurate Results**: Improved algorithm gives you the right command faster
+- **📊 Better Context Understanding**: Understands your workflow patterns more intelligently
+- **⌨️ Better Terminal Support**: Updated keybindings (F4 instead of F1) for wider compatibility
 
-* Rebinds `ctrl-r` to bring up a full-screen reverse history search prioritized with a small neural network.
-* Augments your shell history to track command exit status, timestamp, and execution directory in a SQLite database.
-* Maintains your normal shell history file as well so that you can stop using McFly whenever you want.
-* Unicode support throughout.
-* Includes a simple action to scrub any history item from the McFly database and your shell history files.
-* Designed to be extensible for other shells in the future.
-* Written in Rust, so it's fast and safe.
-* You can type `%` to match any number of characters when searching.
-* Supports Zsh, Bash (version 3+), and PowerShell (version 7+)
+---
 
-## Prioritization
+## 🎯 **What McFly Enhanced Does**
 
-The key feature of McFly is smart command prioritization powered by a small neural network that runs
-in real time. The goal is for the command you want to run to always be one of the top suggestions.
+McFly Enhanced replaces your `ctrl-r` shell history search with an **intelligent search** that actually understands what you're looking for. Instead of just matching text, it learns your habits and suggests commands that make sense for your current situation.
 
-When suggesting a command, McFly takes into consideration:
+**Why You'll Love It:**
+- 🔍 **Smart History Search**: Find commands faster with context-aware suggestions
+- � **Location Awareness**: Suggests commands you typically run in your current directory
+- � **Workflow Understanding**: Remembers command sequences and suggests what usually comes next
+- ✨ **Easy to Spot Matches**: Bold highlighting makes it obvious what matched your search
+- 🗑️ **Clean History**: Easy removal of commands you don't want to see again
+- 🌐 **Works Everywhere**: Supports Bash, Zsh, Fish, and PowerShell
 
-* The directory where you ran the command. You're likely to run that command in the same directory in the future.
-* What commands you typed before the command (e.g., the command's execution context).
-* How often you run the command.
-* When you last ran the command.
-* If you've selected the command in McFly before.
-* The command's historical exit status. You probably don't want to run old failed commands.
+---
 
-## Installation
+## 🎯 **How It's Smarter**
 
-### Install with Homebrew (on macOS or Linux)
+### **Better Command Suggestions**
+The enhanced version learns from your behavior and suggests commands that actually make sense:
 
-1. Install `mcfly`:
-    ```bash
-    brew install mcfly
-    ```
-1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish` file:
+- 📁 **Directory-Smart**: Remembers which commands you use in which folders
+- 🔗 **Sequence-Aware**: Learns common command workflows (like `git add` → `git commit`)
+- 📊 **Usage-Based**: Prioritizes commands you actually use frequently
+- ⏰ **Time-Aware**: Recent commands get appropriate priority
+- ✅ **Success-Focused**: Avoids suggesting commands that usually fail
+- 🎯 **Learning**: Gets better the more you use it
 
-   Bash:
-    ```bash
-    eval "$(mcfly init bash)"
-    ```
+### **Enhanced Search Experience**
+- **Bold Match Highlighting**: Easy to see exactly what matched your search
+- **Fuzzy Search**: Find commands even with typos or partial matches
+- **Faster Results**: Improved algorithm delivers suggestions quicker
 
-   Zsh:
-    ```bash
-    eval "$(mcfly init zsh)"
-    ```
+---
 
-   Fish:
-    ```bash
-    mcfly init fish | source
-    ```
-1. Run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish` or restart your terminal emulator.
+## 📦 **Installation**
 
-#### Uninstalling with Homebrew
-
-1. Remove `mcfly`:
-    ```bash
-    brew uninstall mcfly
-    ```
-1. Remove the lines you added to `~/.bashrc` / `~/.zshrc` / `~/.config/fish/config.fish`.
-
-### Install with MacPorts (on macOS)
-
-1. Update the ports tree
-    ```bash
-    sudo port selfupdate
-    ```
-1. Install `mcfly`:
-    ```bash
-    sudo port install mcfly
-    ```
-1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish` file, as appropriate:
-
-   Bash:
-    ```bash
-    eval "$(mcfly init bash)"
-    ```
-
-   Zsh:
-    ```bash
-    eval "$(mcfly init zsh)"
-    ```
-
-   Fish:
-    ```bash
-    mcfly init fish | source
-    ```
-1. Run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish` or restart your terminal emulator.
-
-#### Uninstalling with MacPorts
-
-1. Remove `mcfly`:
-    ```bash
-    sudo port uninstall mcfly
-    ```
-1. Remove the lines you added to `~/.bashrc` / `~/.zshrc` / `~/.config/fish/config.fish`.
-
-### Installing using our install script (macOS or Linux)
-
-1. `curl -LSfs https://raw.githubusercontent.com/wstein/mcfly/master/ci/install.sh | sh -s -- --git wstein/mcfly` (or, if the current user doesn't have permissions to edit /usr/local/bin, then use `sudo sh -s`.)
-
-2. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish` file, respectively:
-
-   Bash:
-
-   ```bash
-   eval "$(mcfly init bash)"
-   ```
-
-   Zsh:
-
-   ```bash
-   eval "$(mcfly init zsh)"
-   ```
-
-   Fish:
-   ```bash
-   mcfly init fish | source
-   ```
-
-3. Run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish` or restart your terminal emulator.
-
-### Installing manually from GitHub (macOS or Linux)
-
-1. Download the [latest release from GitHub](https://github.com/wstein/mcfly/releases).
-1. Install to a location in your `$PATH`. (For example, you could create a directory at `~/bin`, copy `mcfly` to this location, and add `export PATH="$PATH:$HOME/bin"` to your `.bashrc` / `.zshrc`, or run `set -Ua fish_user_paths "$HOME/bin"` for fish.)
-1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish`, respectively:
-
-   Bash:
-    ```bash
-    eval "$(mcfly init bash)"
-    ```
-
-   Zsh:
-    ```bash
-    eval "$(mcfly init zsh)"
-    ```
-
-   Fish:
-    ```bash
-    mcfly init fish | source
-    ```
-
-1. Run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish` or restart your terminal emulator.
-
-### Install manually from source (macOS, Linux, or Windows)
-
-1. [Install Rust 1.40 or later](https://www.rust-lang.org/tools/install)
-1. Run `git clone https://github.com/wstein/mcfly` and `cd mcfly`
-1. Run `cargo install --path .`
-1. Ensure `~/.cargo/bin` is in your `$PATH`.
-1. Add the following to the end of your `~/.bashrc`, `~/.zshrc`, `~/.config/fish/config.fish`, or powershell `$PROFILE`, respectively:
-
-   Bash:
-    ```bash
-    eval "$(mcfly init bash)"
-    ```
-
-   Zsh:
-    ```bash
-    eval "$(mcfly init zsh)"
-    ```
-
-   Fish:
-    ```bash
-    mcfly init fish | source
-    ```
-
-    Powershell Core (pwsh)
-    ```powershell
-    Invoke-Expression -Command $(mcfly init powershell | out-string)
-    ```
-
-1. Run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish` / `. $PROFILE` or restart your terminal emulator.
-
-### Install by [Zinit](https://github.com/zdharma-continuum/zinit)
-
-* Add below code to your zshrc.
-
-    ```zsh
-    zinit ice lucid wait"0a" from"gh-r" as"program" atload'eval "$(mcfly init zsh)"'
-    zinit light wstein/mcfly
-    ```
-* It will download mcfly and install for you.
-* `$(mcfly init zsh)` will be executed after prompt
-
-## iTerm2
-
-To avoid McFly's UI messing up your scrollback history in iTerm2, make sure this option is unchecked:
-
-<img src="/docs/iterm2.jpeg" alt="iterm2 UI instructions">
-
-## Dump history
-
-McFly can dump the command history into *stdout*.
-
-For example:
-```bash
-mcfly dump --since '2023-01-01' --before '2023-09-12 09:15:30'
-```
-will dump the command run between *2023-01-01 00:00:00.0* to *2023-09-12 09:15:30*(**exclusive**) as **json**.
-You can specify **csv** as dump format via `--format csv` as well.
-
-Each item in dumped commands has the following fields:
-* `cmd`: The run command.
-* `when_run`: The time when the command ran in your local timezone.
-
-You can dump all the commands history without any arguments:
-```bash
-mcfly dump
-```
-
-### --full flag for dump
-
-By default, `mcfly dump` outputs a minimal set of fields for each command: `cmd` and `when_run`.
-
-If you want to see all available metadata for each command, use the `--full` flag:
+### **Install This Enhanced Version**
 
 ```bash
-mcfly dump --full
+# Clone this enhanced fork
+git clone https://github.com/wstein/mcfly.git
+cd mcfly
+
+# Build and install
+cargo install --path .
 ```
 
-With `--full`, the output (in both JSON and CSV formats) will include:
-- `id`: Unique identifier for the command
-- `cmd`: The command string
-- `cmd_tpl`: The command template
-- `session_id`: The session identifier
-- `when_run`: When the command was run
-- `exit_code`: The exit code of the command
-- `selected`: Whether the command was selected in McFly
-- `dir`: The working directory
-- `old_dir`: The previous working directory
+### **Shell Setup**
 
-This is useful for advanced analysis or auditing of your shell history.
+Add to your shell configuration file:
 
-### Timestamp format
-
-McFly parses timestamps via `chrono-systemd-time`, a non-strict implementation of [systemd.time](https://www.freedesktop.org/software/systemd/man/systemd.time.html), with the following exceptions:
-* time units **must** accompany all time span values.
-* time zone suffixes are **not** supported.
-* weekday prefixes are **not** supported.
-
-McFly users simply need to understand **specifying timezone in timestamp isn't allowed**.
-McFly will always use your **local timezone**.
-
-For more details, please refer to the [`chrono-systemd-time` documentation](https://docs.rs/chrono-systemd-time/latest/chrono_systemd_time/).
-
-### Regex
-*Dump* supports filtering commands with regex.
-The regex syntax follows [crate regex](https://docs.rs/regex/latest/regex/#syntax).
-
-For example:
+**Bash** (`~/.bashrc`):
 ```bash
-mcfly dump -r '^cargo run'
+eval "$(mcfly init bash)"
 ```
-will dump all command prefixes with `cargo run`.
 
-You can use `-r/--regex` and time options at the same time.
-
-For example:
+**Zsh** (`~/.zshrc`):
 ```bash
-mcfly dump -r '^cargo run' --since '2023-09-12 09:15:30'
+eval "$(mcfly init zsh)"
 ```
-will dump all command prefixes with `cargo run` ran since *2023-09-12 09:15:30*.
 
-## Settings
-A number of settings can be set via environment variables. To set a setting you should add the following snippets to your `~/.bashrc` / `~/.zshrc` / `~/.config/fish/config.fish`.
-
-### Light Mode
-To swap the color scheme for use in a light terminal, set the environment variable `MCFLY_LIGHT`.
-
-bash / zsh:
+**Fish** (`~/.config/fish/config.fish`):
 ```bash
-export MCFLY_LIGHT=TRUE
+mcfly init fish | source
 ```
 
-fish:
-```bash
-set -gx MCFLY_LIGHT TRUE
-```
-
-powershell:
+**PowerShell** (`$PROFILE`):
 ```powershell
-$env:MCFLY_LIGHT = "TRUE"
+Invoke-Expression -Command $(mcfly init powershell | out-string)
 ```
 
-Tip: on macOS you can use the following snippet for color scheme to be configured based on system-wide settings:
+Then restart your terminal or run `. ~/.bashrc` / `. ~/.zshrc` / `source ~/.config/fish/config.fish`
 
-bash / zsh:
+---
+
+## ⚙️ **Recommended Settings**
+
+### **Enable Enhanced Fuzzy Search**
 ```bash
-if [[ "$(defaults read -g AppleInterfaceStyle 2&>/dev/null)" != "Dark" ]]; then
-    export MCFLY_LIGHT=TRUE
-fi
+# Add to your shell config file
+export MCFLY_FUZZY=3
 ```
 
-### VIM Key Scheme
-By default Mcfly uses an `emacs` inspired key scheme. If you would like to switch to the `vim` inspired key scheme, set the environment variable `MCFLY_KEY_SCHEME`.
-
-bash / zsh:
+### **Optimize Results**
 ```bash
-export MCFLY_KEY_SCHEME=vim
-```
-
-fish:
-```bash
-set -gx MCFLY_KEY_SCHEME vim
-```
-
-powershell:
-```powershell
-$env:MCFLY_KEY_SCHEME="vim"
-```
-
-### Fuzzy Searching
-To enable fuzzy searching, set `MCFLY_FUZZY` to an integer. 0 is off; higher numbers weight toward shorter matches. Values in the 2-5 range get good results so far; try a few and [report what works best for you](https://github.com/wstein/mcfly/issues/183)!
-
-bash / zsh:
-```bash
-export MCFLY_FUZZY=2
-```
-
-fish:
-```bash
-set -gx MCFLY_FUZZY 2
-```
-
-powershell:
-```powershell
-$env:MCFLY_FUZZY=2
-```
-
-### Results Count
-To change the maximum number of results shown, set `MCFLY_RESULTS` (default: 30).
-
-bash / zsh:
-```bash
+# Show more results (default: 30)
 export MCFLY_RESULTS=50
+
+# Sort by relevance (recommended for smart suggestions)
+export MCFLY_RESULTS_SORT=RANK
 ```
 
-fish:
-```bash
-set -gx MCFLY_RESULTS 50
-```
+For all configuration options, see the [original McFly documentation](https://github.com/cantino/mcfly#settings).
 
-powershell:
-```powershell
-$env:MCFLY_RESULTS=50
-```
+---
 
-### Delete without confirmation
-To delete without confirmation, set `MCFLY_DELETE_WITHOUT_CONFIRM` to true.
+## � **Usage Tips**
 
-bash / zsh:
-```bash
-export MCFLY_DELETE_WITHOUT_CONFIRM=true
-```
+### **Getting the Best Results**
+- **Use it regularly**: The smart suggestions get better as you use McFly more
+- **Enable fuzzy search**: Set `MCFLY_FUZZY=3` for the best search experience  
+- **Try partial matches**: You don't need to remember exact command names
+- **Use directory context**: McFly learns which commands you use in which folders
 
-fish:
-```bash
-set -gx MCFLY_DELETE_WITHOUT_CONFIRM true
-```
+### **Common Commands**
+- `ctrl-r`: Start McFly search
+- `↑/↓`: Navigate suggestions
+- `Enter`: Run selected command
+- `Tab`: Select command but don't run (edit first)
+- `Delete`: Remove unwanted commands from history
+- `F4`: Toggle sort order (improved from F1 for better terminal support)
 
-powershell:
-```powershell
-$env:MCFLY_DELETE_WITHOUT_CONFIRM="true"
-```
+---
 
-### Interface view
-To change interface view, set `MCFLY_INTERFACE_VIEW` (default: `TOP`).
-Available options: `TOP` and `BOTTOM`
+## 🔍 **What Makes This Fork Different**
 
-bash / zsh:
-```bash
-export MCFLY_INTERFACE_VIEW=BOTTOM
-```
+| Feature | Original McFly | This Enhanced Fork |
+|---------|---------------|-------------------|
+| **Suggestions Quality** | Good | Much smarter with better learning |
+| **Search Highlighting** | Basic | **Bold highlighting** - easy to spot matches |
+| **Learning Speed** | Standard | Faster adaptation to your patterns |
+| **Command Context** | Basic | Better understanding of workflows |
+| **Setup** | Standard | Same easy setup, better results |
 
-fish:
-```bash
-set -gx MCFLY_INTERFACE_VIEW BOTTOM
-```
+---
 
-powershell:
-```powershell
-$env:MCFLY_INTERFACE_VIEW="BOTTOM"
-```
+## 🆘 **Troubleshooting & More Info**
 
-### Disable menu interface
-To disable the menu interface, set the environment variable `MCFLY_DISABLE_MENU`.
+This enhanced fork maintains full compatibility with original McFly:
 
-bash / zsh:
-```bash
-export MCFLY_DISABLE_MENU=TRUE
-```
+- **All original features work**: Same interface, same shell support, with improved keybindings (F4 vs F1)
+- **Existing history preserved**: Your command history transfers automatically  
+- **Same configuration**: All original environment variables work
 
-fish:
-```bash
-set -gx MCFLY_DISABLE_MENU TRUE
-```
+For detailed troubleshooting, shell-specific setup help, and advanced features, see the comprehensive [original McFly documentation](https://github.com/cantino/mcfly).
 
-powershell:
-```powershell
-$env:MCFLY_DISABLE_MENU=true
- ```
+---
 
-### Results sorting
-To change the sorting of results shown, set `MCFLY_RESULTS_SORT` (default: RANK).
-Possible values `RANK` and `LAST_RUN`
+## � **Learn More**
 
-bash / zsh:
-```bash
-export MCFLY_RESULTS_SORT=LAST_RUN
-```
+- **Original McFly Project**: [cantino/mcfly](https://github.com/cantino/mcfly) - Full documentation and community
+- **Shell Integration Help**: See original docs for detailed shell-specific setup instructions
+- **All Settings**: Complete list of environment variables in original documentation
+- **Issues & Support**: Use the original project's resources for general McFly questions
 
-fish:
-```bash
-set -gx MCFLY_RESULTS_SORT LAST_RUN
-```
+---
 
-powershell:
-```powershell
-$env:MCFLY_RESULTS_SORT="LAST_RUN"
- ```
+## 🙏 **Credits**
 
-### Custom Prompt
-To change the prompt, set `MCFLY_PROMPT` (default: `$`).
-
-bash / zsh:
-```bash
-export MCFLY_PROMPT="❯"
-```
-
-fish:
-```bash
-set -gx MCFLY_PROMPT "❯"
-```
-
-powershell:
-```powershell
-$env:MCFLY_PROMPT=">"
- ```
-
-Note that only single-character-prompts are allowed. setting `MCFLY_PROMPT` to `"<str>"` will reset it to the default prompt.
-
-### Database Location
-
-McFly stores its SQLite database in the standard location for the OS. On OS X, this is in `~/Library/Application Support/McFly`, on Linux it is in `$XDG_DATA_DIR/mcfly/history.db` (default would be `~/.local/share/mcfly/history.db`), and on Windows, it is `%LOCALAPPDATA%\McFly\data\history.db`. For legacy support, if `~/.mcfly/` exists, it is used instead.
-
-### Slow startup
-
-If you have a very large history database and you notice that McFly launches slowly, you can set `MCFLY_HISTORY_LIMIT` to something like 10000 to limit how many records are considered when searching. In this example, McFly would search only the latest 10,000 entries.
-
-### Bash TIOCSTI
-
-Starting with Linux kernel version 6.2, some systems have disabled TIOCSTI (which McFly previously used to write the selected command). McFly works around this issue by using two "dummy" keybindings, which default to `ctrl-x 1` and `ctrl-x 2`. If you are using either of these for another purpose, you can set the `MCFLY_BASH_SEARCH_KEYBINDING` and `MCFLY_BASH_ACCEPT_LINE_KEYBINDING`, respectively, to something you are not using. If you would prefer to use the legacy TIOCSTI behavior, you can enable it by setting the `sysctl` variable `dev.tty.legacy_tiocsti` to `1` on your system and set the `MCFLY_BASH_USE_TIOCSTI` bash variable to `1`.
-
-## HISTTIMEFORMAT
-
-McFly currently doesn't parse or use `HISTTIMEFORMAT`.
-
-## Possible Future Features
-
-* Add a screencast to README.
-* Learn common command options and autocomplete them in the suggestion UI?
-* Sort command line args when coming up with the template matching string.
-* Possible prioritization improvements:
-   * Cross validation & explicit training set selection.
-   * Learn command embeddings
-
-## Development
-
-### Contributing
-
-Contributions and bug fixes are encouraged! However, we may not merge PRs that increase complexity significantly beyond what is already required to maintain the project. If you're in doubt, feel free to open an issue and ask.
-
-### Running tests
-
-`cargo test`
-
-### Releasing (notes for @cantino)
-
-1. Edit `Cargo.toml` and bump the version.
-1. Edit CHANGELOG.txt
-1. Run `cargo clippy` and `cargo fmt`.
-1. Recompile (`cargo build`) and test (`cargo test`)
-1. `git add -p`
-1. `git ci -m 'Bumping to vx.x.x'`
-1. `git tag vx.x.x`
-1. `git push origin head --tags`
-1. Let the build finish.
-1. Edit the new Release on Github.
-1. `cargo publish`
-1. TBD: update homebrew-core Formula at https://github.com/Homebrew/homebrew-core/blob/master/Formula/m/mcfly.rb
-
-Old:
-1. Edit `pkg/brew/mcfly.rb` and update the version and SHAs. (`shasum -a 256 ...`)
-1. Edit `../homebrew-mcfly/pkg/brew/mcfly.rb` too.
-  1. `cp pkg/brew/mcfly.rb ../homebrew-mcfly/pkg/brew/mcfly.rb`
-  1. Compare with `diff ../homebrew-mcfly/pkg/brew/mcfly.rb ../mcfly/pkg/brew/mcfly.rb ; diff ../homebrew-mcfly/HomebrewFormula/mcfly.rb ../mcfly/HomebrewFormula/mcfly.rb`
-1. `git add -p && git ci -m 'Update homebrew' && git push`
-1. `cd ../homebrew-mcfly && git add -p && git ci -m 'Update homebrew' && git push && cd ../mcfly`
+This personal enhanced fork builds upon the excellent [original McFly project by cantino](https://github.com/cantino/mcfly). All core functionality remains faithful to the original design while adding meaningful improvements to the search experience.
