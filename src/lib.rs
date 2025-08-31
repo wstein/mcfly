@@ -3,6 +3,7 @@ pub mod command_input;
 pub mod dumper;
 pub mod fake_typer;
 pub mod fixed_length_grapheme_string;
+pub mod fuzzy_matcher;
 pub mod ml;
 pub mod history;
 pub mod history_cleaner;

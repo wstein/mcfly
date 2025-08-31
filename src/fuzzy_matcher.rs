@@ -1,39 +1,32 @@
-//! Small wrapper around `nucleo_matcher` to provide a simple
-//! match-indices API for the rest of the codebase.
-use nucleo_matcher::{Matcher, Utf32Str};
+//! Fuzzy matching using skim's fuzzy-matcher for enhanced scoring and match quality.
+use fuzzy_matcher::skim::SkimMatcherV2;
+use fuzzy_matcher::FuzzyMatcher;
 
-pub struct NucleoFuzzyMatcher {
-    matcher: Matcher,
+pub struct SkimFuzzyMatcher {
+    matcher: SkimMatcherV2,
 }
 
-impl NucleoFuzzyMatcher {
+impl SkimFuzzyMatcher {
     pub fn new() -> Self {
         Self {
-            matcher: Matcher::default(),
+            matcher: SkimMatcherV2::default(),
         }
     }
 
     /// Return the matched character indices (as usize) for `needle` in `hay`.
+    /// Also returns the match score for enhanced feature extraction.
     /// If no match is found, returns None.
-    pub fn match_indices(&mut self, hay: &str, needle: &str) -> Option<Vec<usize>> {
-        // Utf32Str expects a buffer that outlives the Utf32Str view. Allocate
-        // local buffers and keep them alive for the duration of the call.
-        let mut hay_buf: Vec<char> = Vec::new();
-        let hay_utf = Utf32Str::new(hay, &mut hay_buf);
-
-        let mut needle_buf: Vec<char> = Vec::new();
-        let needle_utf = Utf32Str::new(needle, &mut needle_buf);
-
-        let mut indices: Vec<u32> = Vec::new();
-
-        if let Some(_score) = self.matcher.fuzzy_indices(hay_utf, needle_utf, &mut indices) {
-            // Convert to usize and return; indices should already be in-order
-            // but we defensively sort/dedup to be safe.
-            indices.sort_unstable();
-            indices.dedup();
-            Some(indices.into_iter().map(|i| i as usize).collect())
+    pub fn match_indices(&mut self, hay: &str, needle: &str) -> Option<(Vec<usize>, i64)> {
+        if let Some((score, indices)) = self.matcher.fuzzy_indices(hay, needle) {
+            // Only return first match indices for consistency with current highlighting
+            Some((indices, score))
         } else {
             None
         }
+    }
+
+    /// Get just the match score without indices (faster for scoring-only use cases)
+    pub fn fuzzy_match(&mut self, hay: &str, needle: &str) -> Option<i64> {
+        self.matcher.fuzzy_match(hay, needle)
     }
 }

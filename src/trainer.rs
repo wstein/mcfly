@@ -1,7 +1,7 @@
 use crate::history::History;
 use crate::settings::Settings;
 use crate::training_sample_generator::TrainingSampleGenerator;
-use crate::ml::online::SimpleMlp;
+use crate::ml::scalable_mlp::ScalableMlp;
 
 #[derive(Debug)]
 pub struct Trainer<'a> {
@@ -15,36 +15,37 @@ impl<'a> Trainer<'a> {
     }
 
     /// Offline trainer that loads/generates a dataset and performs several
-    /// epochs of SGD on a SimpleMlp model persisted at `online-ml.yaml`.
+    /// epochs of SGD on a ScalableMlp model persisted at `scalable-ml.yaml`.
     ///
     /// - epochs: number of passes over the dataset (default 5 if 0)
     /// - records: optionally limit number of records per epoch
     pub fn train(&mut self, epochs: usize, records: Option<usize>) {
-    let epochs = if epochs == 0 { self.settings.trainer_epochs } else { epochs };
-    let lr = self.settings.learning_rate as f64;
+        let epochs = if epochs == 0 { self.settings.trainer_epochs } else { epochs };
+        let lr = self.settings.learning_rate as f64;
 
         // Create or load the dataset (will cache to disk internally).
         let generator = TrainingSampleGenerator::new(self.settings, &self.history);
 
         // Determine model path and load or create model.
         let model_path = match Settings::mcfly_db_path().parent() {
-            Some(p) => p.join("online-ml.yaml"),
+            Some(p) => p.join("scalable-ml.yaml"),
             None => {
                 eprintln!("Trainer: unable to determine model path");
                 return;
             }
         };
 
-        // Input dim corresponds to number of feature fields (10)
-        let input_dim = 10usize;
-    let hidden_dim = self.settings.trainer_hidden_dim;
+        // Input dim corresponds to number of feature fields (16 now with enhanced features)
+        let input_dim = 16usize;
+        let hidden_dim = self.settings.trainer_hidden_dim;
         let output_dim = 1usize;
 
-        let mut model = if let Some(mut m) = SimpleMlp::load(&model_path) {
+        let mut model = if let Some(mut m) = ScalableMlp::load(&model_path) {
             m.optimizer_init();
             m
         } else {
-            let mut m = SimpleMlp::new(input_dim, hidden_dim, output_dim);
+            // Create a 3-layer network for better capacity
+            let mut m = ScalableMlp::new(input_dim, hidden_dim, hidden_dim / 2, output_dim);
             m.optimizer_init();
             m
         };
@@ -77,7 +78,7 @@ impl<'a> Trainer<'a> {
                     batch_targets.push(target);
                     if batch_inputs.len() >= bs {
                         // apply averaged minibatch update
-                        model.update_batch(&batch_inputs, &batch_targets, effective_lr, self.settings.weight_decay, self.settings.momentum, &self.settings.optimizer);
+                        model.update_batch(&batch_inputs, &batch_targets, effective_lr, self.settings.weight_decay);
                         seen += batch_inputs.len();
                         batch_inputs.clear();
                         batch_targets.clear();
@@ -86,7 +87,7 @@ impl<'a> Trainer<'a> {
 
                 // flush remaining
                 if !batch_inputs.is_empty() {
-                    model.update_batch(&batch_inputs, &batch_targets, effective_lr, self.settings.weight_decay, self.settings.momentum, &self.settings.optimizer);
+                    model.update_batch(&batch_inputs, &batch_targets, effective_lr, self.settings.weight_decay);
                     seen += batch_inputs.len();
                     batch_inputs.clear();
                     batch_targets.clear();
@@ -95,7 +96,7 @@ impl<'a> Trainer<'a> {
                 generator.generate(records, |features, correct| {
                     let input = generator.normalize_features(features);
                     let target = if correct { vec![1.0f64] } else { vec![0.0f64] };
-                    model.update(&input, &target, effective_lr, self.settings.weight_decay, self.settings.momentum, &self.settings.optimizer);
+                    model.update(&input, &target, effective_lr, self.settings.weight_decay);
                     seen += 1;
                 });
             }

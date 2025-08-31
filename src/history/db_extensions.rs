@@ -37,6 +37,13 @@ pub fn add_db_functions(db: &Connection) {
                 immediate_overlap_factor,
                 selected_occurrences_factor,
                 occurrences_factor,
+                // Enhanced features (default values for SQL context)
+                match_score: 0.0,
+                match_positions: 0.0,
+                match_density: 0.0,
+                match_gap_penalty: 0.0,
+                match_start_bonus: 0.0,
+                match_span_ratio: 0.0,
             };
 
             // If model exists, score with it (model.score now accepts f64). Otherwise return 0.0.

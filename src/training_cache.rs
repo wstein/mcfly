@@ -37,6 +37,13 @@ pub fn read(cache_path: &Path) -> Vec<(Features, bool)> {
             immediate_overlap_factor: record[7].parse().unwrap(),
             selected_occurrences_factor: record[8].parse().unwrap(),
             occurrences_factor: record[9].parse().unwrap(),
+            // Enhanced features (default to 0.0 for cached data)
+            match_score: record.get(10).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+            match_positions: record.get(11).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+            match_density: record.get(12).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+            match_gap_penalty: record.get(13).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+            match_start_bonus: record.get(14).and_then(|s| s.parse().ok()).unwrap_or(0.0),
+            match_span_ratio: record.get(15).and_then(|s| s.parse().ok()).unwrap_or(0.0),
         };
 
         data_set.push((features, record[10].eq("t")));
@@ -58,6 +65,12 @@ fn output_header(writer: &mut Writer<File>) {
             "immediate_overlap_factor",
             "selected_occurrences_factor",
             "occurrences_factor",
+            "match_score",
+            "match_positions",
+            "match_density",
+            "match_gap_penalty",
+            "match_start_bonus",
+            "match_span_ratio",
             "correct",
         ])
         .unwrap_or_else(|err| panic!("McFly error: Expected to write to CSV ({err})"));
@@ -79,6 +92,12 @@ fn output_row(writer: &mut Writer<File>, features: &Features, correct: bool) {
             format!("{}", features.immediate_overlap_factor),
             format!("{}", features.selected_occurrences_factor),
             format!("{}", features.occurrences_factor),
+            format!("{}", features.match_score),
+            format!("{}", features.match_positions),
+            format!("{}", features.match_density),
+            format!("{}", features.match_gap_penalty),
+            format!("{}", features.match_start_bonus),
+            format!("{}", features.match_span_ratio),
             if correct {
                 String::from("t")
             } else {

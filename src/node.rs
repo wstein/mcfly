@@ -89,6 +89,13 @@ mod tests {
             immediate_overlap_factor: 1.0,
             selected_occurrences_factor: 1.0,
             occurrences_factor: 1.0,
+            // Enhanced features (test values)
+            match_score: 1.0,
+            match_positions: 1.0,
+            match_density: 1.0,
+            match_gap_penalty: 1.0,
+            match_start_bonus: 1.0,
+            match_span_ratio: 1.0,
         };
 
         assert_eq!(node.dot(&features), 0.0);

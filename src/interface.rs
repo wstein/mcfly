@@ -9,7 +9,7 @@ use crate::settings::{ResultSort, Settings};
 use chrono::{Duration, TimeZone, Utc};
 use crossterm::event::KeyCode::Char;
 use crossterm::event::{read, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
-use crossterm::style::{Color, Print, SetBackgroundColor, SetForegroundColor};
+use crossterm::style::{Color, Print, SetBackgroundColor, SetForegroundColor, SetAttribute, Attribute};
 use crossterm::terminal::{self, LeaveAlternateScreen};
 use crossterm::terminal::{Clear, ClearType, EnterAlternateScreen};
 use crossterm::{cursor, execute, queue};
@@ -85,8 +85,8 @@ impl MenuMode {
         }
 
         match interface.result_sort {
-            ResultSort::Rank => menu_text.push_str("| F4 - Rank Sort "),
-            ResultSort::LastRun => menu_text.push_str("F4 - Time Sort | "),
+            ResultSort::Rank => menu_text.push_str(" | F4 - Rank Sort"),
+            ResultSort::LastRun => menu_text.push_str(" | F4 - Time Sort"),
         }
         
         menu_text
@@ -140,7 +140,7 @@ impl<'a> Interface<'a> {
             // features (the same features used for ranking).
             let matches = self.history.find_matches(&command, 1, self.settings.fuzzy, &self.settings.result_sort);
             if let Some(cmd) = matches.first() {
-                // Map features to input vector in a stable order.
+                // Map features to input vector in a stable order with enhanced match quality features.
                 fn features_to_input(f: &crate::history::Features) -> Vec<f64> {
                     vec![
                         f.age_factor,
@@ -153,6 +153,13 @@ impl<'a> Interface<'a> {
                         f.immediate_overlap_factor,
                         f.selected_occurrences_factor,
                         f.occurrences_factor,
+                        // Enhanced match quality features
+                        f.match_score,
+                        f.match_positions,
+                        f.match_density,
+                        f.match_gap_penalty,
+                        f.match_start_bonus,
+                        f.match_span_ratio,
                     ]
                 }
 
@@ -1033,7 +1040,9 @@ impl<'a> Interface<'a> {
                 Some(&&j) if i == j => {
                     let _ = match_indices.next();
                     execute!(out, SetForegroundColor(highlight_color)).unwrap();
+                    execute!(out, SetAttribute(Attribute::Bold)).unwrap();
                     out.push_grapheme_str(c);
+                    execute!(out, SetAttribute(Attribute::NormalIntensity)).unwrap();
                 }
                 _ => {
                     execute!(out, SetForegroundColor(base_color)).unwrap();

@@ -1,9 +1,8 @@
 #![allow(clippy::module_inception)]
 use crate::cli::SortOrder;
 use crate::history::{db_extensions, schema};
-// old Network implementation removed; use new SimpleMlp in `learner`
 use crate::path_update_helpers;
-use nucleo_matcher::{Matcher, Utf32Str};
+use crate::fuzzy_matcher::SkimFuzzyMatcher;
 use std::cell::RefCell;
 use crate::settings::{HistoryFormat, ResultFilter, ResultSort, Settings, TimeRange};
 use crate::shell_history;
@@ -19,7 +18,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use std::{fmt, fs, io};
-use crate::ml::online::SimpleMlp;
+use crate::ml::scalable_mlp::ScalableMlp;
 
 #[derive(Debug, Clone, Default)]
 pub struct Features {
@@ -33,6 +32,13 @@ pub struct Features {
     pub immediate_overlap_factor: f64,
     pub selected_occurrences_factor: f64,
     pub occurrences_factor: f64,
+    // Enhanced match quality features from skim
+    pub match_score: f64,          // Raw fuzzy match score
+    pub match_positions: f64,      // Number of matched character positions
+    pub match_density: f64,        // Ratio of matched chars to total chars
+    pub match_gap_penalty: f64,    // Penalty for gaps between matches
+    pub match_start_bonus: f64,    // Bonus for matches at word/command start
+    pub match_span_ratio: f64,     // Ratio of match span to total length
 }
 
 #[derive(Debug, Clone, Default)]
@@ -87,9 +93,8 @@ where
 
 pub struct History {
     pub connection: Connection,
-    // old `network` field removed
-    matcher: RefCell<Option<Matcher>>,
-    learner: RefCell<Option<SimpleMlp>>,
+    matcher: RefCell<Option<SkimFuzzyMatcher>>,
+    learner: RefCell<Option<ScalableMlp>>,
     // Controls how often the model is saved to disk (1 = every update).
     save_frequency: u32,
     // Counts updates since load; used to decide when to persist.
@@ -117,19 +122,13 @@ const IGNORED_COMMANDS: [&str; 7] = [
 ];
 
 impl History {
-    /// Lazily initialize and return a mutable borrow to the shared Matcher.
-    ///
-    /// The internal Matcher contains a large scratch slab so we store it inside an
-    /// Option and only allocate it on first use. This returns a RefMut<Matcher>
-    /// mapped from the internal RefCell<Option<Matcher>>.
-    fn matcher_mut(&self) -> std::cell::RefMut<Matcher> {
-        // If not initialized yet, create the Matcher. The temporary borrow from
-        // `borrow()` is dropped at the end of the `is_none()` check so calling
-        // `borrow_mut()` afterwards is safe.
+    /// Lazily initialize and return a mutable borrow to the shared SkimFuzzyMatcher.
+    fn matcher_mut(&self) -> std::cell::RefMut<SkimFuzzyMatcher> {
+        // If not initialized yet, create the SkimFuzzyMatcher.
         if self.matcher.borrow().is_none() {
-            *self.matcher.borrow_mut() = Some(Matcher::default());
+            *self.matcher.borrow_mut() = Some(SkimFuzzyMatcher::new());
         }
-        std::cell::RefMut::map(self.matcher.borrow_mut(), |opt| opt.as_mut().unwrap())
+        std::cell::RefMut::map(self.matcher.borrow_mut(), |opt: &mut Option<SkimFuzzyMatcher>| opt.as_mut().unwrap())
     }
 
     #[must_use]
@@ -144,49 +143,50 @@ impl History {
         // Try to load learner model (which now embeds update_count) if present
         let (learner, starting_update_count) = match Settings::mcfly_db_path().parent() {
             Some(p) => {
-                let model_path = p.join("online-ml.yaml");
-                match SimpleMlp::load(&model_path) {
+                let model_path = p.join("scalable-ml.yaml");
+                match ScalableMlp::load(&model_path) {
                     Some(m) => {
                         let uc = m.update_count;
                         (Some(m), uc)
                     }
-                    None => (None, 0u32),
+                    None => (None, 0usize),
                 }
             }
-            None => (None, 0u32),
+            None => (None, 0usize),
         };
 
         History {
             learner: RefCell::new(learner),
             save_frequency,
-            update_count: RefCell::new(starting_update_count),
+            update_count: RefCell::new(starting_update_count as u32),
             ..history
         }
     }
 
     /// Score features and optionally update the model on demand.
     /// `update` controls whether a single SGD step is applied with `target` and `lr`.
-    pub fn score_and_maybe_update(&self, features: &[f64], update: bool, target: Option<&[f64]>, lr: f64, weight_decay: f64, momentum: f64, optimizer: &str) -> Vec<f64> {
+    pub fn score_and_maybe_update(&self, features: &[f64], update: bool, target: Option<&[f64]>, lr: f64, weight_decay: f64, _momentum: f64, _optimizer: &str) -> Vec<f64> {
         // Ensure a learner exists
         if self.learner.borrow().is_none() {
-            let model = SimpleMlp::new(features.len(), 8, 1);
+            // Create a 3-layer network: 16 input features -> 32 -> 16 -> 1 output
+            let model = ScalableMlp::new(16, 32, 16, 1);
             *self.learner.borrow_mut() = Some(model);
         }
 
         let mut learner = self.learner.borrow_mut();
         let learner_ref = learner.as_mut().unwrap();
-    let scores = learner_ref.score(features);
+        let scores = learner_ref.score(features);
         if update {
             if let Some(t) = target {
-    learner_ref.update(features, t, lr, weight_decay, momentum, optimizer);
+                learner_ref.update(features, t, lr, weight_decay);
                 // persist model according to save_frequency
                 let mut count = self.update_count.borrow_mut();
                 *count = count.wrapping_add(1);
                 if *count % self.save_frequency == 0 {
                     if let Some(p) = Settings::mcfly_db_path().parent() {
-                        let model_path = p.join("online-ml.yaml");
+                        let model_path = p.join("scalable-ml.yaml");
                         // store the count inside the model YAML before saving
-                        learner_ref.update_count = *count;
+                        learner_ref.update_count = *count as usize;
                         let _ = learner_ref.save(&model_path);
                     }
                 }
@@ -395,7 +395,7 @@ impl History {
                         .get(1)
                         .unwrap_or_else(|err| panic!("McFly error: cmd to be readable ({err})"));
 
-                    let bounds = self.calc_match_indices(&text, &cmd, fuzzy);
+                    let (bounds, match_features) = self.calc_match_indices_with_features(&text, &cmd, fuzzy);
 
                     Ok(Command {
                         id: row.get(0).unwrap_or_else(|err| {
@@ -461,6 +461,13 @@ impl History {
                             occurrences_factor: row.get(18).unwrap_or_else(|err| {
                                 panic!("McFly error: occurrences_factor to be readable ({err})")
                             }),
+                            // Enhanced match quality features from skim
+                            match_score: match_features.0,
+                            match_positions: match_features.1,
+                            match_density: match_features.2,
+                            match_gap_penalty: match_features.3,
+                            match_start_bonus: match_features.4,
+                            match_span_ratio: match_features.5,
                         },
                         last_run: row.get(19).unwrap_or_else(|err| {
                             panic!("McFly error: last_run to be readable ({err})")
@@ -529,8 +536,9 @@ impl History {
         cmd.chars().any(|c| c.is_uppercase())
     }
 
-    /// Calculate the indices of the matches in the text.
-    fn calc_match_indices(&self, text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
+    /// Calculate the indices of the matches in the text and extract match quality features.
+    /// Returns (match_indices, match_features) where match_features contains enhanced scoring data.
+    fn calc_match_indices_with_features(&self, text: &str, cmd: &str, fuzzy: i16) -> (Vec<usize>, (f64, f64, f64, f64, f64, f64)) {
         let (text_s, cmd_s) = if Self::is_case_sensitive(cmd) {
             (text.to_string(), cmd.to_string())
         } else {
@@ -538,34 +546,68 @@ impl History {
         };
 
         match fuzzy {
-            0 => text_s
-                .match_indices(&cmd_s)
-                .flat_map(|(index, _)| index..index + cmd_s.len())
-                .collect(),
-            _ => {
-                // Use the shared Matcher instance on History to avoid
-                // allocating the large scratch slab per call. Lazily initialize
-                // and borrow the matcher mutably for the duration of the match.
-                let mut matcher = self.matcher_mut();
-
-                // Prepare Utf32Str buffers that must outlive the views.
-                let mut hay_buf: Vec<char> = Vec::new();
-                let hay_utf = Utf32Str::new(&text_s, &mut hay_buf);
-
-                let mut needle_buf: Vec<char> = Vec::new();
-                let needle_utf = Utf32Str::new(&cmd_s, &mut needle_buf);
-
-                let mut indices: Vec<u32> = Vec::new();
-
-                if let Some(_score) = matcher.fuzzy_indices(hay_utf, needle_utf, &mut indices) {
-                    indices.sort_unstable();
-                    indices.dedup();
-                    indices.into_iter().map(|i| i as usize).collect()
+            0 => {
+                // Exact match
+                let matches: Vec<_> = text_s
+                    .match_indices(&cmd_s)
+                    .flat_map(|(index, _)| index..index + cmd_s.len())
+                    .collect();
+                let match_features = if matches.is_empty() {
+                    (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
                 } else {
-                    Vec::new()
+                    // For exact matches, provide perfect scores
+                    let match_count = cmd_s.len() as f64;
+                    let density = match_count / text_s.len() as f64;
+                    let start_bonus = if matches.first().unwrap_or(&usize::MAX) == &0 { 1.0 } else { 0.0 };
+                    (100.0, match_count, density, 0.0, start_bonus, density)
+                };
+                (matches, match_features)
+            }
+            _ => {
+                let mut matcher = self.matcher_mut();
+                if let Some((indices, score)) = matcher.match_indices(&text_s, &cmd_s) {
+                    // Calculate enhanced match quality features
+                    let match_positions = indices.len() as f64;
+                    let text_len = text_s.len() as f64;
+                    let _cmd_len = cmd_s.len() as f64;
+                    let match_density = match_positions / text_len;
+                    
+                    // Calculate gap penalty (average gap size between consecutive matches)
+                    let gap_penalty = if indices.len() > 1 {
+                        let total_gaps: usize = indices.windows(2).map(|w| w[1] - w[0] - 1).sum();
+                        total_gaps as f64 / (indices.len() - 1) as f64
+                    } else {
+                        0.0
+                    };
+                    
+                    // Start bonus: higher score if match starts early
+                    let start_bonus = if let Some(&first_idx) = indices.first() {
+                        1.0 - (first_idx as f64 / text_len)
+                    } else {
+                        0.0
+                    };
+                    
+                    // Match span ratio: how much of the text is covered by the match
+                    let span_ratio = if let (Some(&first), Some(&last)) = (indices.first(), indices.last()) {
+                        (last - first + 1) as f64 / text_len
+                    } else {
+                        0.0
+                    };
+                    
+                    let normalized_score = score as f64; // Use raw skim score
+                    let match_features = (normalized_score, match_positions, match_density, gap_penalty, start_bonus, span_ratio);
+                    (indices, match_features)
+                } else {
+                    (Vec::new(), (0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
                 }
             }
         }
+    }
+
+    /// Legacy method for backwards compatibility - only returns indices
+    #[allow(dead_code)]
+    fn calc_match_indices(&self, text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
+        self.calc_match_indices_with_features(text, cmd, fuzzy).0
     }
 
     #[allow(clippy::too_many_arguments)]
