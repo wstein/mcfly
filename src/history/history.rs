@@ -123,7 +123,7 @@ const IGNORED_COMMANDS: [&str; 7] = [
 
 impl History {
     /// Lazily initialize and return a mutable borrow to the shared SkimFuzzyMatcher.
-    fn matcher_mut(&self) -> std::cell::RefMut<SkimFuzzyMatcher> {
+    fn matcher_mut(&self) -> std::cell::RefMut<'_, SkimFuzzyMatcher> {
         // If not initialized yet, create the SkimFuzzyMatcher.
         if self.matcher.borrow().is_none() {
             *self.matcher.borrow_mut() = Some(SkimFuzzyMatcher::new());
