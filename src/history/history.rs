@@ -1,8 +1,9 @@
 #![allow(clippy::module_inception)]
 use crate::cli::SortOrder;
 use crate::history::{db_extensions, schema};
-use crate::network::Network;
 use crate::path_update_helpers;
+use crate::fuzzy_matcher::SkimFuzzyMatcher;
+use std::cell::RefCell;
 use crate::settings::{HistoryFormat, ResultFilter, ResultSort, Settings, TimeRange};
 use crate::shell_history;
 use crate::simplified_command::SimplifiedCommand;
@@ -17,6 +18,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use std::{fmt, fs, io};
+use crate::ml::scalable_mlp::ScalableMlp;
 
 #[derive(Debug, Clone, Default)]
 pub struct Features {
@@ -30,6 +32,13 @@ pub struct Features {
     pub immediate_overlap_factor: f64,
     pub selected_occurrences_factor: f64,
     pub occurrences_factor: f64,
+    // Enhanced match quality features from skim
+    pub match_score: f64,          // Raw fuzzy match score
+    pub match_positions: f64,      // Number of matched character positions
+    pub match_density: f64,        // Ratio of matched chars to total chars
+    pub match_gap_penalty: f64,    // Penalty for gaps between matches
+    pub match_start_bonus: f64,    // Bonus for matches at word/command start
+    pub match_span_ratio: f64,     // Ratio of match span to total length
 }
 
 #[derive(Debug, Clone, Default)]
@@ -50,9 +59,16 @@ pub struct Command {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct DumpCommand {
+    pub id: i64,
     pub cmd: String,
+    pub cmd_tpl: String,
+    pub session_id: String,
     #[serde(serialize_with = "ser_to_datetime")]
     pub when_run: i64,
+    pub exit_code: i32,
+    pub selected: i32,
+    pub dir: Option<String>,
+    pub old_dir: Option<String>,
 }
 
 impl fmt::Display for Command {
@@ -75,10 +91,24 @@ where
     serializer.serialize_str(&to_datetime(*when_run))
 }
 
-#[derive(Debug)]
 pub struct History {
     pub connection: Connection,
-    pub network: Network,
+    matcher: RefCell<Option<SkimFuzzyMatcher>>,
+    learner: RefCell<Option<ScalableMlp>>,
+    // Controls how often the model is saved to disk (1 = every update).
+    save_frequency: u32,
+    // Counts updates since load; used to decide when to persist.
+    update_count: RefCell<u32>,
+}
+
+impl std::fmt::Debug for History {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("History")
+            .field("connection", &"<Connection>")
+            // network removed
+            .field("matcher", &"<Matcher>")
+            .finish()
+    }
 }
 
 const IGNORED_COMMANDS: [&str; 7] = [
@@ -92,8 +122,17 @@ const IGNORED_COMMANDS: [&str; 7] = [
 ];
 
 impl History {
+    /// Lazily initialize and return a mutable borrow to the shared SkimFuzzyMatcher.
+    fn matcher_mut(&self) -> std::cell::RefMut<'_, SkimFuzzyMatcher> {
+        // If not initialized yet, create the SkimFuzzyMatcher.
+        if self.matcher.borrow().is_none() {
+            *self.matcher.borrow_mut() = Some(SkimFuzzyMatcher::new());
+        }
+        std::cell::RefMut::map(self.matcher.borrow_mut(), |opt: &mut Option<SkimFuzzyMatcher>| opt.as_mut().unwrap())
+    }
+
     #[must_use]
-    pub fn load(history_format: HistoryFormat) -> History {
+    pub fn load(history_format: HistoryFormat, save_frequency: u32) -> History {
         let db_path = Settings::mcfly_db_path();
         let history = if db_path.exists() {
             History::from_db_path(db_path)
@@ -101,7 +140,60 @@ impl History {
             History::from_shell_history(history_format)
         };
         schema::migrate(&history.connection);
-        history
+        // Try to load learner model (which now embeds update_count) if present
+        let (learner, starting_update_count) = match Settings::mcfly_db_path().parent() {
+            Some(p) => {
+                let model_path = p.join("scalable-ml.yaml");
+                match ScalableMlp::load(&model_path) {
+                    Some(m) => {
+                        let uc = m.update_count;
+                        (Some(m), uc)
+                    }
+                    None => (None, 0usize),
+                }
+            }
+            None => (None, 0usize),
+        };
+
+        History {
+            learner: RefCell::new(learner),
+            save_frequency,
+            update_count: RefCell::new(starting_update_count as u32),
+            ..history
+        }
+    }
+
+    /// Score features and optionally update the model on demand.
+    /// `update` controls whether a single SGD step is applied with `target` and `lr`.
+    pub fn score_and_maybe_update(&self, features: &[f64], update: bool, target: Option<&[f64]>, lr: f64, weight_decay: f64, _momentum: f64, _optimizer: &str) -> Vec<f64> {
+        // Ensure a learner exists
+        if self.learner.borrow().is_none() {
+            // Create a 3-layer network: 16 input features -> 32 -> 16 -> 1 output
+            let model = ScalableMlp::new(16, 32, 16, 1);
+            *self.learner.borrow_mut() = Some(model);
+        }
+
+        let mut learner = self.learner.borrow_mut();
+        let learner_ref = learner.as_mut().unwrap();
+        let scores = learner_ref.score(features);
+        if update {
+            if let Some(t) = target {
+                learner_ref.update(features, t, lr, weight_decay);
+                // persist model according to save_frequency
+                let mut count = self.update_count.borrow_mut();
+                *count = count.wrapping_add(1);
+                if *count % self.save_frequency == 0 {
+                    if let Some(p) = Settings::mcfly_db_path().parent() {
+                        let model_path = p.join("scalable-ml.yaml");
+                        // store the count inside the model YAML before saving
+                        learner_ref.update_count = *count as usize;
+                        let _ = learner_ref.save(&model_path);
+                    }
+                }
+            }
+        }
+
+        scores
     }
 
     pub fn should_add(&self, command: &str) -> bool {
@@ -303,7 +395,7 @@ impl History {
                         .get(1)
                         .unwrap_or_else(|err| panic!("McFly error: cmd to be readable ({err})"));
 
-                    let bounds = Self::calc_match_indices(&text, &cmd, fuzzy);
+                    let (bounds, match_features) = self.calc_match_indices_with_features(&text, &cmd, fuzzy);
 
                     Ok(Command {
                         id: row.get(0).unwrap_or_else(|err| {
@@ -369,6 +461,13 @@ impl History {
                             occurrences_factor: row.get(18).unwrap_or_else(|err| {
                                 panic!("McFly error: occurrences_factor to be readable ({err})")
                             }),
+                            // Enhanced match quality features from skim
+                            match_score: match_features.0,
+                            match_positions: match_features.1,
+                            match_density: match_features.2,
+                            match_gap_penalty: match_features.3,
+                            match_start_bonus: match_features.4,
+                            match_span_ratio: match_features.5,
                         },
                         last_run: row.get(19).unwrap_or_else(|err| {
                             panic!("McFly error: last_run to be readable ({err})")
@@ -437,37 +536,78 @@ impl History {
         cmd.chars().any(|c| c.is_uppercase())
     }
 
-    /// Calculate the indices of the matches in the text.
-    fn calc_match_indices(text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
-        let (text, cmd) = if Self::is_case_sensitive(cmd) {
+    /// Calculate the indices of the matches in the text and extract match quality features.
+    /// Returns (match_indices, match_features) where match_features contains enhanced scoring data.
+    fn calc_match_indices_with_features(&self, text: &str, cmd: &str, fuzzy: i16) -> (Vec<usize>, (f64, f64, f64, f64, f64, f64)) {
+        let (text_s, cmd_s) = if Self::is_case_sensitive(cmd) {
             (text.to_string(), cmd.to_string())
         } else {
             (text.to_lowercase(), cmd.to_lowercase())
         };
 
         match fuzzy {
-            0 => text
-                .match_indices(&cmd)
-                .flat_map(|(index, _)| index..index + cmd.len())
-                .collect(),
+            0 => {
+                // Exact match
+                let matches: Vec<_> = text_s
+                    .match_indices(&cmd_s)
+                    .flat_map(|(index, _)| index..index + cmd_s.len())
+                    .collect();
+                let match_features = if matches.is_empty() {
+                    (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+                } else {
+                    // For exact matches, provide perfect scores
+                    let match_count = cmd_s.len() as f64;
+                    let density = match_count / text_s.len() as f64;
+                    let start_bonus = if matches.first().unwrap_or(&usize::MAX) == &0 { 1.0 } else { 0.0 };
+                    (100.0, match_count, density, 0.0, start_bonus, density)
+                };
+                (matches, match_features)
+            }
             _ => {
-                let mut search_iter = cmd.chars().peekable();
-
-                text.match_indices(|c| {
-                    let next = search_iter.peek();
-
-                    if next.is_some() && next.unwrap() == &c {
-                        let _advance = search_iter.next();
-
-                        return true;
-                    }
-
-                    false
-                })
-                .map(|m| m.0)
-                .collect()
+                let mut matcher = self.matcher_mut();
+                if let Some((indices, score)) = matcher.match_indices(&text_s, &cmd_s) {
+                    // Calculate enhanced match quality features
+                    let match_positions = indices.len() as f64;
+                    let text_len = text_s.len() as f64;
+                    let _cmd_len = cmd_s.len() as f64;
+                    let match_density = match_positions / text_len;
+                    
+                    // Calculate gap penalty (average gap size between consecutive matches)
+                    let gap_penalty = if indices.len() > 1 {
+                        let total_gaps: usize = indices.windows(2).map(|w| w[1] - w[0] - 1).sum();
+                        total_gaps as f64 / (indices.len() - 1) as f64
+                    } else {
+                        0.0
+                    };
+                    
+                    // Start bonus: higher score if match starts early
+                    let start_bonus = if let Some(&first_idx) = indices.first() {
+                        1.0 - (first_idx as f64 / text_len)
+                    } else {
+                        0.0
+                    };
+                    
+                    // Match span ratio: how much of the text is covered by the match
+                    let span_ratio = if let (Some(&first), Some(&last)) = (indices.first(), indices.last()) {
+                        (last - first + 1) as f64 / text_len
+                    } else {
+                        0.0
+                    };
+                    
+                    let normalized_score = score as f64; // Use raw skim score
+                    let match_features = (normalized_score, match_positions, match_density, gap_penalty, start_bonus, span_ratio);
+                    (indices, match_features)
+                } else {
+                    (Vec::new(), (0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+                }
             }
         }
+    }
+
+    /// Legacy method for backwards compatibility - only returns indices
+    #[allow(dead_code)]
+    fn calc_match_indices(&self, text: &str, cmd: &str, fuzzy: i16) -> Vec<usize> {
+        self.calc_match_indices_with_features(text, cmd, fuzzy).0
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -792,28 +932,34 @@ impl History {
             if let Some(since) = &time_range.since {
                 where_clause.push_str(" :since <= when_run");
                 has_conds = true;
-                params.push((":since", since));
+                params.push( (":since", since) );
             }
 
             if let Some(before) = &time_range.before {
                 if has_conds {
                     where_clause.push_str(" AND");
                 }
-
                 where_clause.push_str(" when_run < :before");
-                params.push((":before", before));
+                params.push( (":before", before) );
             }
         }
 
         let query = format!(
-            "SELECT cmd, when_run FROM commands {} ORDER BY when_run {}",
+            "SELECT id, cmd, cmd_tpl, session_id, when_run, exit_code, selected, dir, old_dir FROM commands {} ORDER BY when_run {}",
             where_clause,
             order.to_str()
         );
         self.run_query(&query, params.as_slice(), |row| {
             Ok(DumpCommand {
-                cmd: row.get(0)?,
-                when_run: row.get(1)?,
+                id: row.get(0)?,
+                cmd: row.get(1)?,
+                cmd_tpl: row.get(2)?,
+                session_id: row.get(3)?,
+                when_run: row.get(4)?,
+                exit_code: row.get(5)?,
+                selected: row.get(6)?,
+                dir: row.get(7).ok(),
+                old_dir: row.get(8).ok(),
             })
         })
     }
@@ -906,7 +1052,10 @@ impl History {
 
         History {
             connection,
-            network: Network::default(),
+            matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
         }
     }
 
@@ -916,7 +1065,42 @@ impl History {
         db_extensions::add_db_functions(&connection);
         History {
             connection,
-            network: Network::default(),
+            matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn matcher_is_lazy_initialized() {
+        // Create an in-memory DB so we don't touch the filesystem.
+        let connection = Connection::open_in_memory().unwrap();
+        db_extensions::add_db_functions(&connection);
+
+        let history = History {
+            connection,
+            matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
+        };
+
+        // Initially the matcher should be uninitialized (None).
+        assert!(history.matcher.borrow().is_none());
+
+        // Trigger a fuzzy match. Use simple strings so the match is found.
+        let indices = history.calc_match_indices("hello world", "hello", 1);
+
+        // After calling with fuzzy>0 the matcher should be initialized.
+        assert!(history.matcher.borrow().is_some());
+
+        // The returned indices should not be empty for this match.
+        assert!(!indices.is_empty());
     }
 }

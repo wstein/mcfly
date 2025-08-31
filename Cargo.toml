@@ -1,11 +1,11 @@
 [package]
 name = "mcfly"
 version = "0.9.3"
-authors = ["Andrew Cantino <cantino@users.noreply.github.com>"]
+authors = ["Andrew Cantino <cantino@users.noreply.github.com>", "Werner Stein <wstein@users.noreply.github.com>"]
 edition = "2021"
 description = "McFly replaces your default ctrl-r shell history search with an intelligent search engine that takes into account your working directory and the context of recently executed commands. McFly's suggestions are prioritized in real time with a small neural network."
 license = "MIT"
-repository = "https://github.com/cantino/mcfly"
+repository = "https://github.com/wstein/mcfly"
 categories = ["command-line-utilities"]
 exclude = ["HomebrewFormula", "HomebrewFormula/*", "pkg/*", "docs/*"]
 
@@ -21,6 +21,7 @@ chrono = "0.4"
 chrono-systemd-time = "0.3"
 csv = "1"
 serde_json = "1"
+serde_yaml = "0.9"
 serde = { version = "1", features = ["derive"] }
 humantime = "2.1"
 directories-next = "2.0"
@@ -30,6 +31,7 @@ path-absolutize = "3.1"
 regex = { version = "1", default-features = false, features = ["perf", "std"] }
 shellexpand = "3"
 unicode-segmentation = "1.11"
+fuzzy-matcher = "0.3"
 
 [dependencies.rusqlite]
 version = "0.33"
@@ -52,3 +54,6 @@ autopilot = "0.4.0"
 [features]
 default = ["sqlite-bundled"]
 sqlite-bundled = ["rusqlite/bundled"]
+
+[dev-dependencies]
+tempfile = "3"

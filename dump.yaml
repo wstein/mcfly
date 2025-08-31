@@ -1,0 +1,1859 @@
+- id: 1
+  cmd: htop
+  cmd_tpl: htop
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 2
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 3
+  cmd: 'echo $PATH | tr : '
+  cmd_tpl: echo $PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 4
+  cmd: 'echo $PATH | tr : \\n'
+  cmd_tpl: echo $PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 5
+  cmd: rvm
+  cmd_tpl: rvm
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 6
+  cmd: bun
+  cmd_tpl: bun
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 7
+  cmd: uv
+  cmd_tpl: uv
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 8
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 9
+  cmd: 'echo $PATH | tr : \\n'
+  cmd_tpl: echo $PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 10
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 11
+  cmd: 'echo $PATH | tr : \\n | grep car'
+  cmd_tpl: echo $PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 12
+  cmd: 'vim ~/.profile '
+  cmd_tpl: vim PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 13
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 14
+  cmd: 'vim ~/.profile '
+  cmd_tpl: vim PATH
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 15
+  cmd: exec bash
+  cmd_tpl: exec bash
+  session_id: IMPORTED
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: null
+  old_dir: null
+- id: 16
+  cmd: source <(mcfly init bash)
+  cmd_tpl: source <(mcfly
+  session_id: CBwRCJKWfD7zZLbh13cAhKvw
+  when_run: '2025-08-03T16:59:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 17
+  cmd: echo source <(mcfly init bash)
+  cmd_tpl: echo source
+  session_id: CBwRCJKWfD7zZLbh13cAhKvw
+  when_run: '2025-08-03T17:00:18+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 18
+  cmd: echo 'source <(mcfly init bash)'
+  cmd_tpl: echo QUOTED
+  session_id: CBwRCJKWfD7zZLbh13cAhKvw
+  when_run: '2025-08-03T17:00:29+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 19
+  cmd: echo 'source <(mcfly init bash)' >> ~/.bashrc
+  cmd_tpl: echo QUOTED
+  session_id: CBwRCJKWfD7zZLbh13cAhKvw
+  when_run: '2025-08-03T17:00:44+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 20
+  cmd: ll
+  cmd_tpl: ll
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:01:06+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 21
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:01:23+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 22
+  cmd: cd target/
+  cmd_tpl: cd PATH
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:01:41+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 23
+  cmd: ll
+  cmd_tpl: ll
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:01:42+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly/target
+  old_dir: /workspaces/mcfly
+- id: 24
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:01:45+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly/target
+  old_dir: /workspaces/mcfly
+- id: 25
+  cmd: dsfkljag
+  cmd_tpl: dsfkljag
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:23:21+00:00'
+  exit_code: 127
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 26
+  cmd: mcfly dump\
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:23:26+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 27
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:23:27+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 28
+  cmd: mcfly dump --format csv
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:24:44+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 29
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:51:55+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 30
+  cmd: mcfly dump --full
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:52:00+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 31
+  cmd: mcfly dump --format csv --full
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:52:16+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 32
+  cmd: mcfly dump --format csv --full > hist.csv
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:52:34+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 33
+  cmd: mcfly dump --full > hist.json
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:52:45+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 34
+  cmd: sudo apt install lazygit
+  cmd_tpl: sudo apt
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:55:11+00:00'
+  exit_code: 100
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 35
+  cmd: sudo apt install nix
+  cmd_tpl: sudo apt
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:55:36+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 36
+  cmd: sudo nix-env -iA lazygit
+  cmd_tpl: sudo nix-env
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:56:15+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 37
+  cmd: sudo nix-env -iA pkgs.lazygit
+  cmd_tpl: sudo nix-env
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:56:31+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 38
+  cmd: sudo nix-env -iA mix-pkgs.lazygit
+  cmd_tpl: sudo nix-env
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:56:37+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 39
+  cmd: nix-env -iA nixpkgs.lazygit
+  cmd_tpl: nix-env -iA
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:56:56+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 40
+  cmd: sudo nix-env -iA nixpkgs.lazygit
+  cmd_tpl: sudo nix-env
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T17:57:02+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 41
+  cmd: mcfly dump --format csv --full
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T18:26:46+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 42
+  cmd: mcfly dump --format csv
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T18:26:49+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 43
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T18:26:59+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 44
+  cmd: mcfly dump --full
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T18:27:04+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 45
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: J3whyuXK69sQNSp9EcSN0iHo
+  when_run: '2025-08-03T18:33:28+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly/target
+- id: 46
+  cmd: mcfly dump\
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:08+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 47
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:09+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 48
+  cmd: mcfly dump --full
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:13+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 49
+  cmd: mcfly dump --full --format csv
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:23+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 50
+  cmd: mcfly dump  --format csv
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:31+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 51
+  cmd: mcfly dump
+  cmd_tpl: mcfly dump
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:46:34+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 52
+  cmd: find target/ | grep mmfl
+  cmd_tpl: find PATH
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:57:26+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 53
+  cmd: find target/ | grep mcfl
+  cmd_tpl: find PATH
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:57:27+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 54
+  cmd: find target/ | grep mcfly\$
+  cmd_tpl: find PATH
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:57:41+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 55
+  cmd: find target/ | grep \/mcfly\$
+  cmd_tpl: find PATH
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:57:50+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 56
+  cmd: ll target/*/mcfly
+  cmd_tpl: ll PATH
+  session_id: ov2w9Cm7JVv72okvWmp35AU9
+  when_run: '2025-08-03T18:58:05+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 57
+  cmd: cross build --target x86_64-apple-darwin
+  cmd_tpl: cross build
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:21:44+00:00'
+  exit_code: 127
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 58
+  cmd: cargo cross build --target x86_64-apple-darwin
+  cmd_tpl: cargo cross
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:22:17+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 59
+  cmd: cargo install cross
+  cmd_tpl: cargo install
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:23:03+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 60
+  cmd: cross build --target x86_64-apple-darwin
+  cmd_tpl: cross build
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:24:23+00:00'
+  exit_code: 127
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 61
+  cmd: cargo cross build --target x86_64-apple-darwin
+  cmd_tpl: cargo cross
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:24:27+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 62
+  cmd: ~/.cargo/bin/cross build --target x86_64-apple-darwin
+  cmd_tpl: ~/.cargo/bin/cross build
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:25:43+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 63
+  cmd: ~/.cargo/bin/cross build --target aarch64-apple-darwin
+  cmd_tpl: ~/.cargo/bin/cross build
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:26:19+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 64
+  cmd: rustup target add aarch64-apple-darwin
+  cmd_tpl: rustup target
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:26:51+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 65
+  cmd: ~/.cargo/bin/cross build --target aarch64-apple-darwin
+  cmd_tpl: ~/.cargo/bin/cross build
+  session_id: YQR1iuGfqzB8mMTPoFXLj8Z5
+  when_run: '2025-08-03T20:27:21+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 66
+  cmd: nix build .#default
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:56:00+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 67
+  cmd: nix build .#default --extra-experimental-features nix-command
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:57:00+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 68
+  cmd: nix
+  cmd_tpl: nix
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:57:10+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 69
+  cmd: sudo systemctl enable --now nix
+  cmd_tpl: sudo systemctl
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:57:55+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 70
+  cmd: sudo systemctl enable --now nixd
+  cmd_tpl: sudo systemctl
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:58:05+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 71
+  cmd: sudo systemctl enable --now nix
+  cmd_tpl: sudo systemctl
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:58:19+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 72
+  cmd: sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
+  cmd_tpl: sh <(curl
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T20:59:42+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 73
+  cmd: sudo chown -R codespace /nix
+  cmd_tpl: sudo chown
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:00:11+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 74
+  cmd: nix
+  cmd_tpl: nix
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:00:20+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 75
+  cmd: nix build .#default
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:00:28+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 76
+  cmd: nix build .#default --extra-experimental-features nix-command
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:00:45+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 77
+  cmd: nix build .#default --extra-experimental-features nix-command --extra-experimental-features
+    flakes
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:00:59+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 78
+  cmd: nix build .#default --extra-experimental-features nix-command
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:04:36+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 79
+  cmd: nix build .#default --extra-experimental-features nix-command --extra-experimental-features
+    flakes
+  cmd_tpl: nix build
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:04:39+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 80
+  cmd: nix develop cargo build
+  cmd_tpl: nix develop
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:05:41+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 81
+  cmd: nix develop
+  cmd_tpl: nix develop
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:05:46+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 82
+  cmd: nix develop --extra-experimental-features nix-command
+  cmd_tpl: nix develop
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:06:16+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 83
+  cmd: nix develop --extra-experimental-features nix-command --extra-experimental-features
+    flakes
+  cmd_tpl: nix develop
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:06:26+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 84
+  cmd: docker run -it --rm -v$PWD:$PWD -w %PWD nixos
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:07:36+00:00'
+  exit_code: 125
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 85
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:07:53+00:00'
+  exit_code: 125
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 86
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos/nix
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:09:01+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 87
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos/nix nix develop -c cargo build
+    --release
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:09:38+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 88
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos/nix nix develop -c cargo build
+    --release --extra-experimental-features nix-command
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:09:57+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 89
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos/nix nix develop --extra-experimental-features
+    nix-command
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:10:09+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 90
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD nixos/nix nix develop --extra-experimental-features
+    nix-command --extra-experimental-features flakes
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:10:20+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 91
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD --uid=%UID  nixos/nix nix develop --extra-experimental-features
+    nix-command --extra-experimental-features flakes
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:11:00+00:00'
+  exit_code: 125
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 92
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD --uid=#UID  nixos/nix nix develop --extra-experimental-features
+    nix-command --extra-experimental-features flakes
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:11:07+00:00'
+  exit_code: 125
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 93
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD --uid=$UID  nixos/nix nix develop --extra-experimental-features
+    nix-command --extra-experimental-features flakes
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:11:14+00:00'
+  exit_code: 125
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 94
+  cmd: docker run -it --rm -v$PWD:$PWD -w $PWD --user=$UID  nixos/nix nix develop
+    --extra-experimental-features nix-command --extra-experimental-features flakes
+  cmd_tpl: docker run
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:11:25+00:00'
+  exit_code: 139
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 95
+  cmd: id
+  cmd_tpl: id
+  session_id: CIhSxx5GosZwEF2h2IdZXQUW
+  when_run: '2025-08-03T21:11:45+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 96
+  cmd: export MCFLY_FUZZY=1
+  cmd_tpl: export MCFLY_FUZZY=1
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:02:51+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 97
+  cmd: set -x
+  cmd_tpl: set -x
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:03:01+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 98
+  cmd: set +x
+  cmd_tpl: set +x
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:03:05+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 99
+  cmd: export MCFLY_FUZZY=1
+  cmd_tpl: export MCFLY_FUZZY=1
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:03:08+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 100
+  cmd: export MCFLY_FUZZY=3
+  cmd_tpl: export MCFLY_FUZZY=3
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:05:56+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 101
+  cmd: export MCFLY_DEBUG=1
+  cmd_tpl: export MCFLY_DEBUG=1
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:16:15+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 102
+  cmd: export MCFLY_FUZZY=30
+  cmd_tpl: export MCFLY_FUZZY=30
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:17:24+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 103
+  cmd: export MCFLY_FUZZY=300
+  cmd_tpl: export MCFLY_FUZZY=300
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:18:12+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 104
+  cmd: which mcfly
+  cmd_tpl: which mcfly
+  session_id: vqUOLL5w2LH15m04EILrfluc
+  when_run: '2025-08-30T15:23:21+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 105
+  cmd: cargo check
+  cmd_tpl: cargo check
+  session_id: ZxHj7K5EO4eqPcDGvaQHAfHB
+  when_run: '2025-08-30T15:24:08+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 106
+  cmd: cargo install .
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:43:18+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 107
+  cmd: cargo install --path .
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:43:43+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 108
+  cmd: cargo install --path . --dev
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:43:49+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 109
+  cmd: cargo install --path . --devel
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:43:52+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 110
+  cmd: cargo install --path . --develop
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:43:54+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 111
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:44:52+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 112
+  cmd: export MCFLY_FUZZY=3
+  cmd_tpl: export MCFLY_FUZZY=3
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:45:26+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 113
+  cmd: export MCFLY_DEBUG=1
+  cmd_tpl: export MCFLY_DEBUG=1
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:45:35+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 114
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:49:42+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 115
+  cmd: cargo build --quiet && echo "Build successful!"
+  cmd_tpl: cargo build
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:49:57+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 116
+  cmd: ./target/debug/mcfly search "docker" | head -5
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:50:34+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 117
+  cmd: ./target/debug/mcfly search "docker"
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:50:45+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 118
+  cmd: export MCFLY_HISTORY=/tmp/test_history.txt && echo "docker run hello" > /tmp/test_history.txt
+    && echo "docker build ." >> /tmp/test_history.txt && ./target/debug/mcfly search
+    "doc"
+  cmd_tpl: export PATH
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:51:00+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 119
+  cmd: docker build .
+  cmd_tpl: docker build
+  session_id: k6poENuhFHjw1gLoJ0Uj3pVt
+  when_run: '2025-08-30T21:51:44+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 120
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T21:52:11+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 121
+  cmd: cargo build --quiet && echo "Build successful!"
+  cmd_tpl: cargo build
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:06:25+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 122
+  cmd: cargo install --path . --debug && echo "Install successful!"
+  cmd_tpl: cargo install
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:08:18+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 123
+  cmd: ./target/debug/mcfly search "docker"
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:14:41+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 124
+  cmd: cargo install --path . --debug && echo "Install successful!"
+  cmd_tpl: cargo install
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:15:31+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 125
+  cmd: echo "Testing mcfly debug output" && mcfly search --fuzzy 3 "test"
+  cmd_tpl: echo QUOTED
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:15:57+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 126
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T22:18:12+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 127
+  cmd: cargo install --path . --debug && echo "Install successful!"
+  cmd_tpl: cargo install
+  session_id: 2P1IVzCwq6730gWoEi1vFD32
+  when_run: '2025-08-30T22:24:18+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 128
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T22:52:16+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 129
+  cmd: mcfly dump --all
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:03:49+00:00'
+  exit_code: 2
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 130
+  cmd: mcfly dump --full >dump.json
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:04:09+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 131
+  cmd: mcfly dump --full | yq -P >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:04:36+00:00'
+  exit_code: 127
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 132
+  cmd: sudo apt install yq
+  cmd_tpl: sudo apt
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:05:11+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 133
+  cmd: mcfly dump --full | yq -P >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:05:15+00:00'
+  exit_code: 2
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 134
+  cmd: mcfly dump --full | yq >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:05:59+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 135
+  cmd: mcfly dump --full | yq -t yaml >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:06:21+00:00'
+  exit_code: 3
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 136
+  cmd: mcfly dump --full | yq -t >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:06:33+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 137
+  cmd: mcfly dump --full | yq -o yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:06:55+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 138
+  cmd: mcfly dump --full | yq -yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:07:21+00:00'
+  exit_code: 2
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 139
+  cmd: mcfly dump --full | yq --yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:07:30+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 140
+  cmd: mcfly dump --full | yq -y
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:07:45+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 141
+  cmd: mcfly dump --full | yq -y >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: in7aj5KdeEgryNHlI04xnGTl
+  when_run: '2025-08-30T23:07:54+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 142
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T23:08:17+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 143
+  cmd: mcfly dump --full | yq -y >dump.yaml
+  cmd_tpl: mcfly dump
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T23:23:14+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 144
+  cmd: mcfly search -o search.txt
+  cmd_tpl: mcfly search
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T23:25:47+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 145
+  cmd: mcfly search > search.txt
+  cmd_tpl: mcfly search
+  session_id: UjWQdpJhfUnKfvSDEF0iXDk3
+  when_run: '2025-08-30T23:26:25+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 146
+  cmd: ./target/debug/mcfly search "" --results 20
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:32:07+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 147
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:34:38+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 148
+  cmd: ./target/debug/mcfly search "" --results 20
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:34:49+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 149
+  cmd: cargo build --quiet
+  cmd_tpl: cargo build
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:36:20+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 150
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:36:23+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 151
+  cmd: ./target/debug/mcfly search "export" --results 10
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:37:31+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 152
+  cmd: chmod +x test_ranking.sh && ./test_ranking.sh
+  cmd_tpl: chmod +x
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:37:58+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 153
+  cmd: ./target/debug/mcfly search > output.txt 2>&1 || echo "Search completed"
+  cmd_tpl: ./target/debug/mcfly search
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:38:13+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 154
+  cmd: cat output.txt
+  cmd_tpl: cat output.txt
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:38:20+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 156
+  cmd: mcfly search -o search_output.txt "export"
+  cmd_tpl: mcfly search
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:39:11+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 157
+  cmd: cat search_output.txt
+  cmd_tpl: cat search_output.txt
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:39:54+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 158
+  cmd: MCFLY_DEBUG=1 mcfly search -o search_debug.txt "mcfly"
+  cmd_tpl: MCFLY_DEBUG=1 mcfly
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:41:29+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 159
+  cmd: head -30 search_debug.txt
+  cmd_tpl: head -30
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:42:16+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 161
+  cmd: find ~ -type d  | grep mcfly
+  cmd_tpl: find ~
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:47:12+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 162
+  cmd: ll /home/codespace/.local/share/mcfly
+  cmd_tpl: ll PATH
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:47:20+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 163
+  cmd: mcfly train
+  cmd_tpl: mcfly train
+  session_id: R2iw2XVQaEHqjMi8vMufyro4
+  when_run: '2025-08-30T23:50:39+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 164
+  cmd: cargo check
+  cmd_tpl: cargo check
+  session_id: kx2qdGdfXEBCSCB5jZQLEsqs
+  when_run: '2025-08-31T00:05:05+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 165
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: kx2qdGdfXEBCSCB5jZQLEsqs
+  when_run: '2025-08-31T00:05:26+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 166
+  cmd: cargo doc --package nucleo-matcher --open 2>/dev/null || echo "Doc generation
+    not available"
+  cmd_tpl: cargo doc
+  session_id: kx2qdGdfXEBCSCB5jZQLEsqs
+  when_run: '2025-08-31T00:05:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 167
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: kx2qdGdfXEBCSCB5jZQLEsqs
+  when_run: '2025-08-31T00:08:22+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 168
+  cmd: git add src
+  cmd_tpl: git add
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T00:33:33+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 169
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T00:35:40+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 171
+  cmd: cargo build
+  cmd_tpl: cargo build
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:05:17+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 173
+  cmd: cargo test
+  cmd_tpl: cargo test
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:18:23+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 174
+  cmd: cargo test --verbose
+  cmd_tpl: cargo test
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:19:51+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 175
+  cmd: cargo test
+  cmd_tpl: cargo test
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:28:07+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 176
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo build --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:28:39+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 177
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:28:43+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 178
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --verbos
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:31:54+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 179
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --test-threads 1 --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:31:54+00:00'
+  exit_code: 1
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 180
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:32:02+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 181
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --quiet --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:32:58+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 182
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --verbose'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:33:05+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 183
+  cmd: bash -lc 'cd /workspaces/mcfly && cargo test --quiet'
+  cmd_tpl: bash -lc
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T01:51:55+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 185
+  cmd: ll /home/codespace/.local/share/mcfly
+  cmd_tpl: ll PATH
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:14:44+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 186
+  cmd: code /home/codespace/.local/share/mcfly/history.db
+  cmd_tpl: code PATH
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:15:07+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 188
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:16:24+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 189
+  cmd: code /home/codespace/.local/share/mcfly/history.db
+  cmd_tpl: code PATH
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:16:44+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 190
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:17:46+00:00'
+  exit_code: 2
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 191
+  cmd: mcfly train
+  cmd_tpl: mcfly train
+  session_id: FK2JpTBKDPrs352noDERtK0x
+  when_run: '2025-08-31T02:23:49+00:00'
+  exit_code: 130
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /workspaces/mcfly
+- id: 192
+  cmd: cargo test --all --quiet
+  cmd_tpl: cargo test
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:23:55+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 193
+  cmd: cargo test --all
+  cmd_tpl: cargo test
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:24:02+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 194
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:25:00+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 195
+  cmd: mcfly search -o search.txt
+  cmd_tpl: mcfly search
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:25:47+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 196
+  cmd: cargo test --all
+  cmd_tpl: cargo test
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:25:53+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 197
+  cmd: code /home/codespace/.local/share/mcfly/online-ml.json
+  cmd_tpl: code PATH
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:27:59+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 198
+  cmd: cargo test --all
+  cmd_tpl: cargo test
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:28:13+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 200
+  cmd: mcfly
+  cmd_tpl: mcfly
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:33:44+00:00'
+  exit_code: 2
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 201
+  cmd: ll /home/codespace/.local/share/mcfly
+  cmd_tpl: ll PATH
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:34:15+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 202
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:34:26+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 203
+  cmd: cargo build -q
+  cmd_tpl: cargo build
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:39:07+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 204
+  cmd: cargo install --path . --debug
+  cmd_tpl: cargo install
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:39:45+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 205
+  cmd: sudo apt install yq
+  cmd_tpl: sudo apt
+  session_id: yj8khY1zbMaq2KJVHLoVJDNO
+  when_run: '2025-08-31T02:42:01+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly
+- id: 206
+  cmd: sudo apt install lazygit
+  cmd_tpl: sudo apt
+  session_id: yj8khY1zbMaq2KJVHLoVJDNO
+  when_run: '2025-08-31T02:42:41+00:00'
+  exit_code: 100
+  selected: 1
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly
+- id: 207
+  cmd: sudo apt install nix
+  cmd_tpl: sudo apt
+  session_id: yj8khY1zbMaq2KJVHLoVJDNO
+  when_run: '2025-08-31T02:42:52+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /home/codespace
+  old_dir: /workspaces/mcfly
+- id: 208
+  cmd: cargo build -q
+  cmd_tpl: cargo build
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:46:56+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 209
+  cmd: ll /home/codespace/.local/share/mcfly
+  cmd_tpl: ll PATH
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:54:15+00:00'
+  exit_code: 0
+  selected: 1
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 210
+  cmd: rm /home/codespace/.local/share/mcfly/online-ml.json
+  cmd_tpl: rm PATH
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:54:36+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 211
+  cmd: cargo test --workspace --tests -q
+  cmd_tpl: cargo test
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:54:50+00:00'
+  exit_code: 101
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81
+- id: 212
+  cmd: cargo install --path . --debug -q --locked
+  cmd_tpl: cargo install
+  session_id: Vz8ftZwen86Jp3JZdhqmuvIf
+  when_run: '2025-08-31T02:55:36+00:00'
+  exit_code: 0
+  selected: 0
+  dir: /workspaces/mcfly
+  old_dir: /vscode/bin/linux-x64/488a1f239235055e34e673291fb8d8c810886f81

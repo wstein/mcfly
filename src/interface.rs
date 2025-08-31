@@ -9,7 +9,7 @@ use crate::settings::{ResultSort, Settings};
 use chrono::{Duration, TimeZone, Utc};
 use crossterm::event::KeyCode::Char;
 use crossterm::event::{read, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
-use crossterm::style::{Color, Print, SetBackgroundColor, SetForegroundColor};
+use crossterm::style::{Color, Print, SetBackgroundColor, SetForegroundColor, SetAttribute, Attribute};
 use crossterm::terminal::{self, LeaveAlternateScreen};
 use crossterm::terminal::{Clear, ClearType, EnterAlternateScreen};
 use crossterm::{cursor, execute, queue};
@@ -77,11 +77,6 @@ impl MenuMode {
             menu_text.push_str("⏎ - Run | TAB - Edit | ");
         }
 
-        match interface.result_sort {
-            ResultSort::Rank => menu_text.push_str("F1 - Rank Sort | "),
-            ResultSort::LastRun => menu_text.push_str("F1 - Time Sort | "),
-        }
-
         menu_text.push_str("F2 - Delete | ");
 
         match interface.result_filter {
@@ -89,6 +84,11 @@ impl MenuMode {
             ResultFilter::CurrentDirectory => menu_text.push_str("F3 - This Directory"),
         }
 
+        match interface.result_sort {
+            ResultSort::Rank => menu_text.push_str(" | F4 - Rank Sort"),
+            ResultSort::LastRun => menu_text.push_str(" | F4 - Time Sort"),
+        }
+        
         menu_text
     }
 
@@ -134,6 +134,40 @@ impl<'a> Interface<'a> {
                 &self.settings.session_id,
                 &self.settings.dir,
             );
+            // Live update the learner on every selection: map features for the
+            // selected command and perform a single SGD step with a small
+            // learning rate. We find the top match to obtain its contextual
+            // features (the same features used for ranking).
+            let matches = self.history.find_matches(&command, 1, self.settings.fuzzy, &self.settings.result_sort);
+            if let Some(cmd) = matches.first() {
+                // Map features to input vector in a stable order with enhanced match quality features.
+                fn features_to_input(f: &crate::history::Features) -> Vec<f64> {
+                    vec![
+                        f.age_factor,
+                        f.length_factor,
+                        f.exit_factor,
+                        f.recent_failure_factor,
+                        f.selected_dir_factor,
+                        f.dir_factor,
+                        f.overlap_factor,
+                        f.immediate_overlap_factor,
+                        f.selected_occurrences_factor,
+                        f.occurrences_factor,
+                        // Enhanced match quality features
+                        f.match_score,
+                        f.match_positions,
+                        f.match_density,
+                        f.match_gap_penalty,
+                        f.match_start_bonus,
+                        f.match_span_ratio,
+                    ]
+                }
+
+                let input = features_to_input(&cmd.features);
+                // target 1.0 indicates this command was selected (positive example)
+                let lr = self.settings.learning_rate as f64;
+                let _ = self.history.score_and_maybe_update(&input, true, Some(&[1.0f64]), lr, self.settings.weight_decay, self.settings.momentum, &self.settings.optimizer);
+            }
             SelectionResult {
                 run: self.run,
                 selection: Some(command),
@@ -952,7 +986,7 @@ impl<'a> Interface<'a> {
                 } => self.input.move_cursor(Move::EOL),
 
                 KeyEvent {
-                    code: KeyCode::F(1),
+                    code: KeyCode::F(4),
                     ..
                 } => {
                     self.switch_result_sort();
@@ -1006,7 +1040,9 @@ impl<'a> Interface<'a> {
                 Some(&&j) if i == j => {
                     let _ = match_indices.next();
                     execute!(out, SetForegroundColor(highlight_color)).unwrap();
+                    execute!(out, SetAttribute(Attribute::Bold)).unwrap();
                     out.push_grapheme_str(c);
+                    execute!(out, SetAttribute(Attribute::NormalIntensity)).unwrap();
                 }
                 _ => {
                     execute!(out, SetForegroundColor(base_color)).unwrap();

@@ -101,6 +101,18 @@ pub enum SubCommand {
         /// Directory where command was run
         #[arg(short, long = "refresh_cache")]
         refresh_cache: bool,
+    /// Number of epochs to run (default: 5)
+    #[arg(long = "epochs")]
+    epochs: Option<usize>,
+    /// Hidden layer size for trainer (default: 8)
+    #[arg(long = "hidden-dim")]
+    hidden_dim: Option<usize>,
+    /// Batch size to use during training (optional)
+    #[arg(long = "batch-size")]
+    batch_size: Option<usize>,
+    /// Optimizer to use during training (sgd|adam)
+    #[arg(long = "optimizer")]
+    optimizer: Option<String>,
     },
 
     /// Prints the shell code used to execute mcfly
@@ -138,6 +150,10 @@ pub enum SubCommand {
         /// The format to dump in
         #[arg(long, short, value_enum, default_value_t)]
         format: DumpFormat,
+
+        /// Output all fields (full dump)
+        #[arg(long)]
+        full: bool,
     },
 
     /// Prints stats

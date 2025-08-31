@@ -9,6 +9,9 @@ use std::fs;
 #[derive(Debug)]
 pub struct TrainingSampleGenerator {
     data_set: Vec<(Features, bool)>,
+    // per-feature normalization (computed from dataset)
+    pub means: Vec<f64>,
+    pub stds: Vec<f64>,
 }
 
 impl TrainingSampleGenerator {
@@ -27,7 +30,99 @@ impl TrainingSampleGenerator {
             training_cache::read(&cache_path)
         };
 
-        TrainingSampleGenerator { data_set }
+        // compute per-feature mean/std (10 features)
+        let mut means = vec![0.0f64; 16];
+        let mut stds = vec![0.0f64; 16];
+        if !data_set.is_empty() {
+            let n = data_set.len() as f64;
+            // accumulate sums
+            for (f, _) in &data_set {
+                let vals = [
+                    f.age_factor,
+                    f.length_factor,
+                    f.exit_factor,
+                    f.recent_failure_factor,
+                    f.selected_dir_factor,
+                    f.dir_factor,
+                    f.overlap_factor,
+                    f.immediate_overlap_factor,
+                    f.selected_occurrences_factor,
+                    f.occurrences_factor,
+                    f.match_score,
+                    f.match_positions,
+                    f.match_density,
+                    f.match_gap_penalty,
+                    f.match_start_bonus,
+                    f.match_span_ratio,
+                ];
+                for i in 0..16 {
+                    means[i] += vals[i];
+                }
+            }
+            for i in 0..16 {
+                means[i] /= n;
+            }
+            // variance
+            for (f, _) in &data_set {
+                let vals = [
+                    f.age_factor,
+                    f.length_factor,
+                    f.exit_factor,
+                    f.recent_failure_factor,
+                    f.selected_dir_factor,
+                    f.dir_factor,
+                    f.overlap_factor,
+                    f.immediate_overlap_factor,
+                    f.selected_occurrences_factor,
+                    f.occurrences_factor,
+                    f.match_score,
+                    f.match_positions,
+                    f.match_density,
+                    f.match_gap_penalty,
+                    f.match_start_bonus,
+                    f.match_span_ratio,
+                ];
+                for i in 0..16 {
+                    let d = vals[i] - means[i];
+                    stds[i] += d * d;
+                }
+            }
+            for i in 0..16 {
+                stds[i] = (stds[i] / n).sqrt();
+                // avoid division by zero
+                if stds[i] == 0.0 { stds[i] = 1.0; }
+            }
+        }
+
+        TrainingSampleGenerator { data_set, means, stds }
+    }
+
+    /// Normalize a Features struct into a length-16 f64 vector using computed means/stds.
+    pub fn normalize_features(&self, features: &Features) -> Vec<f64> {
+        let raw = [
+            features.age_factor,
+            features.length_factor,
+            features.exit_factor,
+            features.recent_failure_factor,
+            features.selected_dir_factor,
+            features.dir_factor,
+            features.overlap_factor,
+            features.immediate_overlap_factor,
+            features.selected_occurrences_factor,
+            features.occurrences_factor,
+            features.match_score,
+            features.match_positions,
+            features.match_density,
+            features.match_gap_penalty,
+            features.match_start_bonus,
+            features.match_span_ratio,
+        ];
+        let mut out = Vec::with_capacity(16);
+        for i in 0..16 {
+            let v = (raw[i] - self.means[i]) / self.stds[i];
+            out.push(v);
+        }
+        out
     }
 
     pub fn generate_data_set(history: &History) -> Vec<(Features, bool)> {

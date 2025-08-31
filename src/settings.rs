@@ -151,12 +151,27 @@ pub struct Settings {
     pub sort_order: SortOrder,
     pub pattern: Option<Regex>,
     pub dump_format: DumpFormat,
+    pub full_dump: bool,
     pub colors: Colors,
     pub stats_min_cmd_length: i16,
     pub stats_cmds: i16,
     pub stats_dirs: i16,
     pub stats_global_commands_to_ignore: i16,
     pub stats_only_dir: Option<String>,
+    // Online learning hyperparameters
+    pub learning_rate: f64,
+    // Number of updates between model saves. 1 = save every update.
+    pub save_frequency: u32,
+    // Offline trainer hyperparameters
+    pub trainer_epochs: usize,
+    pub trainer_hidden_dim: usize,
+    pub trainer_batch_size: Option<usize>,
+    // Optimizer & scheduler
+    pub optimizer: String,
+    pub momentum: f64,
+    pub weight_decay: f64,
+    pub lr_decay_step: Option<usize>,
+    pub lr_decay_factor: f64,
 }
 
 impl Default for Settings {
@@ -175,7 +190,7 @@ impl Default for Settings {
             refresh_training_cache: false,
             append_to_histfile: None,
             debug: false,
-            fuzzy: 0,
+            fuzzy: 3,
             lightmode: false,
             key_scheme: KeyScheme::Emacs,
             history_format: HistoryFormat::Bash,
@@ -193,6 +208,7 @@ impl Default for Settings {
             sort_order: SortOrder::default(),
             pattern: None,
             dump_format: DumpFormat::default(),
+            full_dump: false,
             colors: Colors {
                 menubar_bg: Color::Blue,
                 menubar_fg: Color::White,
@@ -222,6 +238,16 @@ impl Default for Settings {
             stats_dirs: 0,
             stats_global_commands_to_ignore: 10,
             stats_only_dir: None,
+            learning_rate: 0.01,
+            save_frequency: 1,
+            trainer_epochs: 5,
+            trainer_hidden_dim: 8,
+            trainer_batch_size: None,
+            optimizer: String::from("sgd"),
+            momentum: 0.9,
+            weight_decay: 1e-4,
+            lr_decay_step: None,
+            lr_decay_factor: 0.5,
         }
     }
 }
@@ -415,10 +441,14 @@ impl Settings {
                 }
             }
 
-            SubCommand::Train { refresh_cache } => {
+            SubCommand::Train { refresh_cache, epochs, hidden_dim, batch_size, optimizer } => {
                 settings.mode = Mode::Train;
 
                 settings.refresh_training_cache = refresh_cache;
+                if let Some(e) = epochs { settings.trainer_epochs = e }
+                if let Some(h) = hidden_dim { settings.trainer_hidden_dim = h }
+                if let Some(b) = batch_size { settings.trainer_batch_size = Some(b) }
+                if let Some(o) = optimizer { settings.optimizer = o }
             }
 
             SubCommand::Move {
@@ -449,6 +479,7 @@ impl Settings {
                 sort,
                 regex,
                 format,
+                full,
             } => {
                 settings.mode = Mode::Dump;
 
@@ -457,6 +488,7 @@ impl Settings {
                 settings.sort_order = sort;
                 settings.pattern = regex;
                 settings.dump_format = format;
+                settings.full_dump = full;
             }
 
             SubCommand::Stats {
@@ -476,6 +508,66 @@ impl Settings {
         }
 
         settings.lightmode = is_env_var_truthy("MCFLY_LIGHT");
+
+        // Learning-rate and save-frequency can be configured via environment
+        // variables or later via the config file.
+        if let Ok(lr) = env::var("MCFLY_LEARNING_RATE") {
+            if let Ok(parsed) = lr.parse::<f64>() {
+                settings.learning_rate = parsed;
+            }
+        }
+
+        if let Ok(sf) = env::var("MCFLY_SAVE_FREQUENCY") {
+            if let Ok(parsed) = sf.parse::<u32>() {
+                settings.save_frequency = parsed.max(1);
+            }
+        }
+
+        if let Ok(te) = env::var("MCFLY_TRAINER_EPOCHS") {
+            if let Ok(parsed) = te.parse::<usize>() {
+                settings.trainer_epochs = parsed;
+            }
+        }
+
+        if let Ok(th) = env::var("MCFLY_TRAINER_HIDDEN_DIM") {
+            if let Ok(parsed) = th.parse::<usize>() {
+                settings.trainer_hidden_dim = parsed;
+            }
+        }
+
+        if let Ok(tb) = env::var("MCFLY_TRAINER_BATCH_SIZE") {
+            if let Ok(parsed) = tb.parse::<usize>() {
+                settings.trainer_batch_size = Some(parsed);
+            }
+        }
+
+        if let Ok(opt) = env::var("MCFLY_OPTIMIZER") {
+            settings.optimizer = opt;
+        }
+
+        if let Ok(mom) = env::var("MCFLY_MOMENTUM") {
+            if let Ok(parsed) = mom.parse::<f64>() {
+                settings.momentum = parsed;
+            }
+        }
+
+        if let Ok(wd) = env::var("MCFLY_WEIGHT_DECAY") {
+            if let Ok(parsed) = wd.parse::<f64>() {
+                settings.weight_decay = parsed;
+            }
+        }
+
+        if let Ok(ld) = env::var("MCFLY_LR_DECAY_STEP") {
+            if let Ok(parsed) = ld.parse::<usize>() {
+                settings.lr_decay_step = Some(parsed);
+            }
+        }
+
+        if let Ok(lf) = env::var("MCFLY_LR_DECAY_FACTOR") {
+            if let Ok(parsed) = lf.parse::<f64>() {
+                settings.lr_decay_factor = parsed;
+            }
+        }
 
         settings.disable_menu = is_env_var_truthy("MCFLY_DISABLE_MENU");
 
@@ -652,6 +744,58 @@ impl Settings {
                 .and_then(|v| Color::from_str(v.as_str()).ok())
             {
                 self.colors.lightmode_colors.results_selection_hl = results_selection_hl;
+            }
+        }
+
+        // Parse online learning config if present at top-level
+        if let Some(lr_val) = config_map.get("learning_rate") {
+            if let Some(lr) = lr_val
+                .clone()
+                .into_float()
+                .ok()
+                .or_else(|| lr_val.clone().into_string().ok().and_then(|s| s.parse::<f64>().ok()))
+            {
+                self.learning_rate = lr as f64;
+            }
+        }
+
+        if let Some(opt_val) = config_map.get("optimizer") {
+            if let Some(s) = opt_val.clone().into_string().ok() {
+                self.optimizer = s;
+            }
+        }
+
+        if let Some(mom_val) = config_map.get("momentum") {
+            if let Some(m) = mom_val.clone().into_float().ok().or_else(|| mom_val.clone().into_string().ok().and_then(|s| s.parse::<f64>().ok())) {
+                self.momentum = m;
+            }
+        }
+
+        if let Some(wd_val) = config_map.get("weight_decay") {
+            if let Some(w) = wd_val.clone().into_float().ok().or_else(|| wd_val.clone().into_string().ok().and_then(|s| s.parse::<f64>().ok())) {
+                self.weight_decay = w;
+            }
+        }
+
+        if let Some(ld_val) = config_map.get("lr_decay_step") {
+            if let Some(ld) = ld_val.clone().into_int().ok().or_else(|| ld_val.clone().into_string().ok().and_then(|s| s.parse::<i64>().ok())) {
+                if ld > 0 {
+                    self.lr_decay_step = Some(ld as usize);
+                }
+            }
+        }
+
+        if let Some(lf_val) = config_map.get("lr_decay_factor") {
+            if let Some(lf) = lf_val.clone().into_float().ok().or_else(|| lf_val.clone().into_string().ok().and_then(|s| s.parse::<f64>().ok())) {
+                self.lr_decay_factor = lf;
+            }
+        }
+
+        if let Some(sf_val) = config_map.get("save_frequency") {
+            if let Some(sf) = sf_val.clone().into_int().ok().or_else(|| sf_val.clone().into_string().ok().and_then(|s| s.parse::<i64>().ok())) {
+                if sf > 0 {
+                    self.save_frequency = sf as u32;
+                }
             }
         }
     }

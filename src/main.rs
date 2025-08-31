@@ -14,7 +14,7 @@ use mcfly::stats_generator::StatsGenerator;
 use mcfly::trainer::Trainer;
 
 fn handle_addition(settings: &Settings) {
-    let history = History::load(settings.history_format);
+    let history = History::load(settings.history_format, settings.save_frequency);
     if history.should_add(&settings.command) {
         history.add(
             &settings.command,
@@ -43,7 +43,7 @@ fn handle_addition(settings: &Settings) {
 }
 
 fn handle_search(settings: &Settings) {
-    let history = History::load(settings.history_format);
+    let history = History::load(settings.history_format, settings.save_frequency);
     let result = Interface::new(settings, &history).display();
     if let Some(cmd) = result.selection {
         if let Some(path) = &settings.output_selection {
@@ -84,12 +84,13 @@ fn handle_search(settings: &Settings) {
 }
 
 fn handle_train(settings: &Settings) {
-    let mut history = History::load(settings.history_format);
-    Trainer::new(settings, &mut history).train();
+    let mut history = History::load(settings.history_format, settings.save_frequency);
+    // Call train with default arguments (0 -> trainer will choose default epochs)
+    Trainer::new(settings, &mut history).train(0, None);
 }
 
 fn handle_move(settings: &Settings) {
-    let history = History::load(settings.history_format);
+    let history = History::load(settings.history_format, settings.save_frequency);
     history.update_paths(&settings.old_dir.clone().unwrap(), &settings.dir, true);
 }
 
@@ -98,12 +99,12 @@ fn handle_init(settings: &Settings) {
 }
 
 fn handle_dump(settings: &Settings) {
-    let history = History::load(settings.history_format);
+    let history = History::load(settings.history_format, settings.save_frequency);
     Dumper::new(settings, &history).dump();
 }
 
 fn handle_stats(settings: &Settings) {
-    let history = History::load(settings.history_format);
+    let history = History::load(settings.history_format, settings.save_frequency);
     let stats = StatsGenerator::new(&history).generate_stats(settings);
     println!("{stats}");
 }
