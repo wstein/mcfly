@@ -1,7 +1,7 @@
 #![allow(clippy::module_inception)]
 use crate::cli::SortOrder;
 use crate::history::{db_extensions, schema};
-use crate::network::Network;
+// old Network implementation removed; use new SimpleMlp in `learner`
 use crate::path_update_helpers;
 use nucleo_matcher::{Matcher, Utf32Str};
 use std::cell::RefCell;
@@ -19,6 +19,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use std::{fmt, fs, io};
+use crate::ml::online::SimpleMlp;
 
 #[derive(Debug, Clone, Default)]
 pub struct Features {
@@ -86,15 +87,20 @@ where
 
 pub struct History {
     pub connection: Connection,
-    pub network: Network,
+    // old `network` field removed
     matcher: RefCell<Option<Matcher>>,
+    learner: RefCell<Option<SimpleMlp>>,
+    // Controls how often the model is saved to disk (1 = every update).
+    save_frequency: u32,
+    // Counts updates since load; used to decide when to persist.
+    update_count: RefCell<u32>,
 }
 
 impl std::fmt::Debug for History {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("History")
             .field("connection", &"<Connection>")
-            .field("network", &"<Network>")
+            // network removed
             .field("matcher", &"<Matcher>")
             .finish()
     }
@@ -127,7 +133,7 @@ impl History {
     }
 
     #[must_use]
-    pub fn load(history_format: HistoryFormat) -> History {
+    pub fn load(history_format: HistoryFormat, save_frequency: u32) -> History {
         let db_path = Settings::mcfly_db_path();
         let history = if db_path.exists() {
             History::from_db_path(db_path)
@@ -135,7 +141,59 @@ impl History {
             History::from_shell_history(history_format)
         };
         schema::migrate(&history.connection);
-        history
+        // Try to load learner model (which now embeds update_count) if present
+        let (learner, starting_update_count) = match Settings::mcfly_db_path().parent() {
+            Some(p) => {
+                let model_path = p.join("online-ml.yaml");
+                match SimpleMlp::load(&model_path) {
+                    Some(m) => {
+                        let uc = m.update_count;
+                        (Some(m), uc)
+                    }
+                    None => (None, 0u32),
+                }
+            }
+            None => (None, 0u32),
+        };
+
+        History {
+            learner: RefCell::new(learner),
+            save_frequency,
+            update_count: RefCell::new(starting_update_count),
+            ..history
+        }
+    }
+
+    /// Score features and optionally update the model on demand.
+    /// `update` controls whether a single SGD step is applied with `target` and `lr`.
+    pub fn score_and_maybe_update(&self, features: &[f64], update: bool, target: Option<&[f64]>, lr: f64, weight_decay: f64, momentum: f64, optimizer: &str) -> Vec<f64> {
+        // Ensure a learner exists
+        if self.learner.borrow().is_none() {
+            let model = SimpleMlp::new(features.len(), 8, 1);
+            *self.learner.borrow_mut() = Some(model);
+        }
+
+        let mut learner = self.learner.borrow_mut();
+        let learner_ref = learner.as_mut().unwrap();
+    let scores = learner_ref.score(features);
+        if update {
+            if let Some(t) = target {
+    learner_ref.update(features, t, lr, weight_decay, momentum, optimizer);
+                // persist model according to save_frequency
+                let mut count = self.update_count.borrow_mut();
+                *count = count.wrapping_add(1);
+                if *count % self.save_frequency == 0 {
+                    if let Some(p) = Settings::mcfly_db_path().parent() {
+                        let model_path = p.join("online-ml.yaml");
+                        // store the count inside the model YAML before saving
+                        learner_ref.update_count = *count;
+                        let _ = learner_ref.save(&model_path);
+                    }
+                }
+            }
+        }
+
+        scores
     }
 
     pub fn should_add(&self, command: &str) -> bool {
@@ -952,8 +1010,10 @@ impl History {
 
         History {
             connection,
-            network: Network::default(),
             matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
         }
     }
 
@@ -963,8 +1023,10 @@ impl History {
         db_extensions::add_db_functions(&connection);
         History {
             connection,
-            network: Network::default(),
             matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
         }
     }
 }
@@ -981,8 +1043,10 @@ mod tests {
 
         let history = History {
             connection,
-            network: Network::default(),
             matcher: RefCell::new(None),
+            learner: RefCell::new(None),
+            save_frequency: 1,
+            update_count: RefCell::new(0),
         };
 
         // Initially the matcher should be uninitialized (None).

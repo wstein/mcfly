@@ -134,6 +134,33 @@ impl<'a> Interface<'a> {
                 &self.settings.session_id,
                 &self.settings.dir,
             );
+            // Live update the learner on every selection: map features for the
+            // selected command and perform a single SGD step with a small
+            // learning rate. We find the top match to obtain its contextual
+            // features (the same features used for ranking).
+            let matches = self.history.find_matches(&command, 1, self.settings.fuzzy, &self.settings.result_sort);
+            if let Some(cmd) = matches.first() {
+                // Map features to input vector in a stable order.
+                fn features_to_input(f: &crate::history::Features) -> Vec<f64> {
+                    vec![
+                        f.age_factor,
+                        f.length_factor,
+                        f.exit_factor,
+                        f.recent_failure_factor,
+                        f.selected_dir_factor,
+                        f.dir_factor,
+                        f.overlap_factor,
+                        f.immediate_overlap_factor,
+                        f.selected_occurrences_factor,
+                        f.occurrences_factor,
+                    ]
+                }
+
+                let input = features_to_input(&cmd.features);
+                // target 1.0 indicates this command was selected (positive example)
+                let lr = self.settings.learning_rate as f64;
+                let _ = self.history.score_and_maybe_update(&input, true, Some(&[1.0f64]), lr, self.settings.weight_decay, self.settings.momentum, &self.settings.optimizer);
+            }
             SelectionResult {
                 run: self.run,
                 selection: Some(command),
